@@ -3,16 +3,15 @@
  *
  * @type {{moduleId: string, moduleLabel: string}}
  */
-const constants = {
+export const constants = {
    moduleId: 'resistance-roller',
-   moduleLabel: `Resistance Roller`
+   moduleLabel: `Resistance Roller`,
+   socketName: "module.resistance-roller"
 };
 
 /**
  * @type {ESSessionConstants} Defines all the module session storage static constants.
  */
-const sessionConstants = {
+export const sessionConstants = {
    themeDarkMode: `${constants.moduleId}.theme.dark`
 };
-
-export { constants, sessionConstants };

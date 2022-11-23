@@ -15,6 +15,7 @@ export default class RollApp extends SvelteApplication
       return foundry.utils.mergeObject(super.defaultOptions, {
          title: 'TemplateESM.title',  // Automatically localized from `lang/en.json`.
          width: 800,
+         height: 800,
 
          svelte: {
             class: RollAppShell,
