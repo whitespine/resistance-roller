@@ -1,7 +1,7 @@
 {
-  "id": "template-svelte-esm",
-  "name": "template-svelte-esm",
-  "title": "Template Svelte (ESM)",
+  "id": "resistance-roller",
+  "name": "resistance-roller",
+  "title": "Resistance Roller",
   "description": "Provides a bare-bones Foundry module template repo to get set up with using the TyphonJS Runtime Library and Svelte with ES Modules.",
   "author": "Michael Leahy (TyphonJS) - MLeahy#4299",
   "authors": [
