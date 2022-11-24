@@ -1,6 +1,6 @@
 <script>
    import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
-   import { domainChoices, skillChoices, mastery } from "../../stores"
+   import { domainChoices, skillChoices, mastery, playerCharacters, participantChoices } from "../../stores"
    import Checktangle from "./Checktangle.svelte";
 
    export let elementRoot;
@@ -29,27 +29,25 @@
    <main>
       <h1 class="header">Resistance Roll</h1>
       <div class="domains"> 
-         Domains
+         <h2>Domains</h2>
          {#each domains as domain}
             <Checktangle label={domain} selected={$domainChoices.includes(domain)} on:click={togglePresence(domainChoices, domain)} />
          {/each}
          {$domainChoices.join("")}
       </div>
       <div class="skills"> 
-         Skills
+         <h2>Skills</h2>
          {#each skills as skill}
             <Checktangle label={skill} selected={$skillChoices.includes(skill)} on:click={togglePresence(skillChoices, skill)} />
          {/each}
       </div>
       <div class="addons"> 
-         Misc
-         <label>
-            <input type=checkbox bind:checked={$mastery}>
-            Mastery
-         </label>
-      </div>
-      <div class="help"> 
-         Participants
+         <h2>Mastery</h2>
+         <Checktangle label={"Mastery"} selected={$mastery} on:click={() => mastery.update(x => !x)} />
+         <h2>Participants</h2>
+         {#each $playerCharacters as pc}
+            <Checktangle label={pc.name} selected={$participantChoices.includes(pc.id)} on:click={togglePresence(participantChoices, pc.id)} />
+         {/each}
       </div>
       <div class="difficulty">
          Difficulty
