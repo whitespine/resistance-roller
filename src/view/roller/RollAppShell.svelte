@@ -1,12 +1,13 @@
 <script>
    import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
-   import { domainChoices, skillChoices, mastery, playerCharacters, participantChoices } from "../../stores"
+   import { domainChoices, skillChoices, mastery, playerCharacters, participantChoices, difficulty, resistance } from "../../stores"
    import Checktangle from "./Checktangle.svelte";
 
    export let elementRoot;
 
    const domains = CONFIG.resistanceRoller.domains;
    const skills = CONFIG.resistanceRoller.skills;
+   const resistances = CONFIG.resistanceRoller.resistances;
 
    const togglePresence = (in_store, value) => (() => {
       in_store.update(current => {
@@ -33,7 +34,6 @@
          {#each domains as domain}
             <Checktangle label={domain} selected={$domainChoices.includes(domain)} on:click={togglePresence(domainChoices, domain)} />
          {/each}
-         {$domainChoices.join("")}
       </div>
       <div class="skills"> 
          <h2>Skills</h2>
@@ -50,10 +50,27 @@
          {/each}
       </div>
       <div class="difficulty">
-         Difficulty
+         <h2>Difficulty</h2>
+         <Checktangle label="Standard" selected={$difficulty == 0} on:click={() => difficulty.set(0)} />
+         <Checktangle label="Risky" selected={$difficulty == 1} on:click={() => difficulty.set(1)} />
+         <Checktangle label="Dangerous" selected={$difficulty == 2} on:click={() => difficulty.set(2)} />
+      </div>
+      <div class="stress-track">
+         <h2>Resistance</h2>
+         {#each resistances as res}
+            <Checktangle label={res} selected={$resistance == res} on:click={() => resistance.set(res)} />
+         {/each}
+
       </div>
       <div class="stress-dice">
-         Stress
+         <h2>Stress</h2>
+      </div>
+      <div class="the-roll">
+         <div>
+            {#each [1,2,3] as _, i}
+               <img src="icons/dice/d10black.svg">
+            {/each}
+         </div>
       </div>
    </main>
 </ApplicationShell>
@@ -61,9 +78,9 @@
 <style lang="scss">
    main {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: 60px 1fr 1fr 2fr 60px;
-      gap: 5px 10px;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: 50px 1fr 2fr 2fr 60px;
+      gap: 1px 10px;
    }
 
    .header {
@@ -85,7 +102,7 @@
    }
    .addons {
       grid-column: 5 / 7;
-      grid-row: 2 / 3;
+      grid-row: 2 / 4;
       display: flex;
       flex-direction: column;
    }
@@ -99,8 +116,16 @@
       grid-column: 6;
       grid-row: 4;
    }
-   .difficulty {
-      grid-column: 1;
+   .the-roll {
+      grid-column: 3 / 5;
       grid-row: 4;
+   }
+   .difficulty {
+      grid-column: 7 / 9;
+      grid-row: 2;
+   }
+   .stress-track {
+      grid-column: 7 / 9;
+      grid-row: 3;
    }
 </style>

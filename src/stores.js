@@ -6,6 +6,8 @@ export const skillChoices = socket_store("skill_choices", []);
 export const participantChoices = socket_store("participant_choices", []);
 export const mastery = socket_store("mastery", false);
 export const resistance = socket_store("resistance", "Mind");
+export const difficulty = socket_store("difficulty", 0);
+
 export const users = readable([], (set) => {
     let user_ids = [];
     let interval = setInterval(() => {

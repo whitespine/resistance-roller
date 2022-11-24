@@ -11,7 +11,7 @@
 <style lang="scss">
     button {
         // font-family: "MelmaCracked";
-        font-size: 1.5em;
+        font-size: 1.3em;
         text-transform: uppercase;
         color: #B0B0B0;
 
