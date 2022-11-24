@@ -17,7 +17,6 @@ const socket_stores = {};
 
 /** Initializes the sockets for synchronizing our store */
 export function listenSockets() {
-    console.log("SOCKET: Listeneing", constants.socketName);
     // Initialize our listeners
     game.socket.on(constants.socketName, (message, senderId) => {
         // Unpack message
@@ -51,7 +50,6 @@ function sendSocket(store, mode, data, time_override=null) {
         time: time_override ?? Date.now(),
         data 
     });
-    console.log("SENDING SOCKET", store, mode, data, time_override);
 }
 
 /**
@@ -88,6 +86,11 @@ export function socket_store(key, initial) {
         sendSocket(key, MODE_SET_VALUE, v);
     }
 
+    // Updates this store, sending the change on socket as well
+    const updateSend = (f) => {
+        setSend(f(cv));
+    }
+
     // Asks peers for their current value
     const askPeers = (v) => {
         sendSocket(key, MODE_REQUEST_VALUE, time);
@@ -104,6 +107,7 @@ export function socket_store(key, initial) {
         subscribe, 
         receive,
         set: setSend,
+        update: updateSend,
         askPeers,
         respondPeers,
     };

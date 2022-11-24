@@ -24,6 +24,7 @@ Hooks.once('init', async function() {
     CONFIG.resistanceRoller = { 
         settings: new TJSGameSettings() ,
         domains: ["Cursed", "Desolate", "Haven", "Occult", "Religion", "Technology", "Warren", "Wild"],
-        skills: ["Compel", "Delve", "Discern", "Endure", "Evade", "Hunt", "Kill", "Mend", "Sneak"]
+        skills: ["Compel", "Delve", "Discern", "Endure", "Evade", "Hunt", "Kill", "Mend", "Sneak"],
+        resistances: ["Blood", "Echo", "Fortune", "Mind", "Supplies"]
     }; 
 });
