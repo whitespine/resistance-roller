@@ -50,12 +50,8 @@
       </div>
       <div class="help"> 
          Participants
-         <label>
-            <input type=checkbox bind:checked={$mastery}>
-            Mastery
-         </label>
       </div>
-      <div class="threats">
+      <div class="difficulty">
          Difficulty
       </div>
       <div class="stress-dice">
@@ -102,10 +98,11 @@
       flex-direction: column;
    }
    .stress-dice {
-      grid-column: 3;
+      grid-column: 6;
       grid-row: 4;
    }
    .difficulty {
-
+      grid-column: 1;
+      grid-row: 4;
    }
 </style>

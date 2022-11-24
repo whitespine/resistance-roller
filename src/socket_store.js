@@ -2,10 +2,12 @@ import { constants } from "./constants";
 import { writable } from "svelte/store";
 
 const MODE_REQUEST_VALUE = "req"; // data will be the requesters current time. Only respond if you have a newer one
+const MODE_REQUEST_ALL = "req_all"; // data will be null. time will not matter
 const MODE_SET_VALUE = "set"; // data will be the new value
+const MODE_SET_ALL = "set_all"; // data will be an object of of { key: {time, val} }
 
 // All of our stores are tracked here
-const socket_stores = {};
+const SOCKET_STORES = {};
 
 /**
  * All messages will have the following:
@@ -21,25 +23,41 @@ export function listenSockets() {
     game.socket.on(constants.socketName, (message, senderId) => {
         // Unpack message
         let { store, mode, time, data } = message;
+        let ss;
         console.log("RECEIVING SOCKET", store, mode, data, time);
-        let ss = socket_stores[store];
-        if (!ss) {
-            console.error(`Received message about unknown store ${store}`);
-            return;
+        if (store) {
+            ss = SOCKET_STORES[store];
+            if (!ss) {
+                console.error(`Received message about unknown store ${store}`);
+                return;
+            }
         }
 
         // Handle messages
         if (mode == MODE_REQUEST_VALUE) {
+            // Tell the specified store to give up its data
             ss.respondPeers(data);
         } else if (mode == MODE_SET_VALUE) {
+            // Pass it along to the appropriate store
             ss.receive(data, time);
+        } else if (mode == MODE_REQUEST_ALL) {
+            // Someone asked for everything. Oblige!
+            let payload = {};
+            for(let [key, store] of Object.entries(SOCKET_STORES)) {
+                payload[key] = store.getState();
+            }
+            sendSocket(null, MODE_SET_ALL, payload);
+        } else if (mode == MODE_SET_ALL) {
+            // We got everything. Didn't necessarily ask for it, but best to set all values to be sure
+            for(let [key, val] of Object.entries(data)) {
+                ss = SOCKET_STORES[key];
+                ss.receive(val.value, val.time);
+            }
         }
     });
 
     // Have all current sockets ask peers
-    for(let ss of Object.values(socket_stores)) {
-        ss.askPeers();
-    }
+    sendSocket(null, MODE_REQUEST_ALL, null, null);
 }
 
 /** Wrapper to send on our socket */
@@ -58,7 +76,7 @@ function sendSocket(store, mode, data, time_override=null) {
  */
 export function socket_store(key, initial) {
     // Check duplicate
-    if (key in socket_stores) {
+    if (key in SOCKET_STORES) {
         throw new Error(`Duplicate socket store key ${key}`);
     }
 
@@ -96,10 +114,19 @@ export function socket_store(key, initial) {
         sendSocket(key, MODE_REQUEST_VALUE, time);
     }
 
-    // Possiblt respond to askPeers
+    // Possibly respond to askPeers
     const respondPeers = (request_time) => {
         if (request_time < time) {
             sendSocket(store, MODE_SET_VALUE, cv, time);
+        }
+    }
+
+    // Use for building bring-up-to-speed stuff
+    const getState = () => {
+        return {
+            key, 
+            time, 
+            value: cv
         }
     }
 
@@ -110,7 +137,8 @@ export function socket_store(key, initial) {
         update: updateSend,
         askPeers,
         respondPeers,
+        getState
     };
-    socket_stores[key] = result;
+    SOCKET_STORES[key] = result;
     return result;
 }
