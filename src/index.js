@@ -2,6 +2,7 @@ import RollApp from './view/roller/RollApp.js';
 import { TJSGameSettings }    from '@typhonjs-fvtt/svelte-standard/store';
 import { listenSockets } from "./socket_store";
 import MenuApp from './view/MenuApp.js';
+import { constants } from './constants.js';
 
 Hooks.once('ready', () => {
     const sidebarRect = document.querySelector('#sidebar').getBoundingClientRect();
@@ -28,3 +29,16 @@ Hooks.once('init', async function() {
         resistances: ["Blood", "Echo", "Fortune", "Mind", "Supplies"]
     }; 
 });
+
+Hooks.on('getActorDirectoryEntryContext', (html, entries) => {
+    // Add a context menu option to track adversaries
+    entries.splice(0, 0, {
+        name: "Track Resistance",
+        icon: '<i class="fas fa-heart-pulse"></i>',
+        callback: ([li]) => {
+            let actor = game.actors.get(li.dataset.documentId);
+            let tracked = actor.flags[constants.moduleId]?.tracked ?? false;
+            actor.update({[`flags.${constants.moduleId}.tracked`]: !tracked});
+        }
+    })
+})

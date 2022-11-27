@@ -16,6 +16,7 @@ export default class RollApp extends SvelteApplication
          title: 'TemplateESM.title',  // Automatically localized from `lang/en.json`.
          width: 600,
          height: 600,
+         resizable: true,
 
          svelte: {
             class: RollAppShell,

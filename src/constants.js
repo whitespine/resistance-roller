@@ -6,7 +6,8 @@
 export const constants = {
    moduleId: 'resistance-roller',
    moduleLabel: `Resistance Roller`,
-   socketName: "module.resistance-roller"
+   socketName: "module.resistance-roller",
+   defaultMaxResistance: 5
 };
 
 /**
