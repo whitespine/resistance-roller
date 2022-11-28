@@ -29,7 +29,7 @@
 </script>
 
 <div on:click={incrementDice} on:contextmenu|preventDefault={decrementDice}>
-    <img style="border: none" src={diceIcon}>
+    <img src={diceIcon}>
     {#if $stressBonus > 0}
     <span>D{$dice} + {$stressBonus}</span>
     {:else}
@@ -44,5 +44,10 @@
     }
     span {
         text-align: center;
+        font-weight: bold;
+    }
+    img {
+      border: none;
+      margin-bottom: -25px;
     }
 </style>

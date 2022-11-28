@@ -1,9 +1,7 @@
 <script>
    import { constants } from "../../constants";
-   import { TJSDocument }  from '@typhonjs-fvtt/runtime/svelte/store';
 
-   export let actor;
-   const actore = new TJSDocument(actor);
+   export let actore; // A TJSDocument of an actor
    $: flags = $actore.flags[constants.moduleId];
    $: currentResistance = flags?.current_resistance ?? 0;
    $: maxResistance = flags?.max_resistance ?? constants.defaultMaxResistance;
@@ -11,29 +9,69 @@
 </script>
 
 
-<div>
-    <img src={$actore.img}>
-    <span>{$actore.name}</span>
-    <progress value={currentResistance / maxResistance}>{currentResistance} / {maxResistance}</progress>
+<div class="main">
+    <h2 class="name" >{$actore.name}</h2>
+    <div class="portrait">
+        <img src={$actore.img}>
+    </div>
+    <div class="progress-bar">
+        <div class="progress" style="width: {100*currentResistance / maxResistance}%"></div>
+        <span class="progress-text">
+            {currentResistance} / {maxResistance}
+        </span>
+    </div>
     {#each domains as domain}
         <div class=domain> {domain} </div>       
     {/each}
 </div>
 
 <style lang="scss">
-    div {
+    .main {
         display: grid;
-        grid-template-rows: 1fr 10px 10px;
+        grid-template-rows: 35px 1fr 20px;
+        grid-template-columns: 1fr 1fr;
         grid-auto-rows: 20px;
     }
-    progress {
-		display: block;
-		width: 100%;
-	}
+
+    .name {
+        text-align: center;
+        grid-column: 1 / 3;
+    }
+
+    .portrait {
+        grid-column: 1 / 3;
+    }
+
+    img {
+        border: none;
+    }
+
+    .progress-bar {
+        grid-column: 1 / 3;
+        display: block;
+        width: 100%;
+        background: #37114d;
+        // overflow: hidden;
+        text-align: center;
+    }
+
+    .progress {
+        background: #32e0e0;
+        transition: all .3s;
+        height: 20px;
+        margin-bottom: -21px;
+    }
+
+    .progress-text {
+        font-size: 1.3em;
+        color: white;
+        text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    }
+
     .domain {
         font-size: 0.8em;
         text-transform: uppercase;
-        color: #B0B0B0;
+        color: #D0D0D0;
 
         border: 0;
         font-weight: bold;

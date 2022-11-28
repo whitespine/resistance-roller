@@ -3,6 +3,7 @@ import { SvelteApplication }  from '@typhonjs-fvtt/runtime/svelte/application';
 import ClientSettingsAppShell  from './ClientSettingsAppShell.svelte';
 
 import { constants }          from '../../constants.js';
+import settings          from '../../settings';
 
 export default class ClientSettingsApp extends SvelteApplication
 {
@@ -14,7 +15,7 @@ export default class ClientSettingsApp extends SvelteApplication
       super(options);
 
       // Register a client game setting.
-      CONFIG.resistanceRoller.settings.register({
+      settings.register({
          namespace: constants.moduleId,
          key: 'app-state',
          options: {
@@ -56,7 +57,7 @@ export default class ClientSettingsApp extends SvelteApplication
             props: function()
             {
                // Creates a store
-               return { settingStore: CONFIG.resistanceRoller.settings.getStore('app-state') };
+               return { settingStore: settings.getStore('app-state') };
             }
          }
       });

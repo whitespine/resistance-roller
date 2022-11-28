@@ -40,7 +40,7 @@ export default class MenuApp extends SvelteApplication
    {
       /** @type {{}[]} */
       const buttons = [
-         { title: 'Roller', class: RollApp },
+         { title: 'Roller', onclick: () => RollApp.for(game.actors.contents[0]).render(true, {focus: true}) },
          { title: 'Settings', class: ClientSettingsApp },
          // { title: 'Hello Foundry', class: HelloFoundryApplication },
          // { title: 'Hello Foundry', class: HelloFoundryApplication },

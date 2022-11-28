@@ -1,5 +1,4 @@
 import RollApp from './view/roller/RollApp.js';
-import { TJSGameSettings }    from '@typhonjs-fvtt/svelte-standard/store';
 import { listenSockets } from "./socket_store";
 import MenuApp from './view/MenuApp.js';
 import { constants } from './constants.js';
@@ -12,7 +11,7 @@ Hooks.once('ready', () => {
 });
 
 Hooks.once('init', async function() {
-    // make a bind to summon the roller
+    // Make a bind to summon the roller
     game.keybindings.register("resistance-roller", "start-roll", {
 				name: "Initiate resistance roll",
 				onDown: () => {
@@ -21,9 +20,15 @@ Hooks.once('init', async function() {
 				onUp: () => {},
 				precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
 			});
+    
+    // Set up api access
+    game[constants.moduleId] = {
+        RollApp,
+        summonRoller: (actor) => RollApp.appForActor(actor).render(true, { focus: true })
+    };
 
+    // Set up some basic configurable options
     CONFIG.resistanceRoller = { 
-        settings: new TJSGameSettings() ,
         domains: ["Cursed", "Desolate", "Haven", "Occult", "Religion", "Technology", "Warren", "Wild"],
         skills: ["Compel", "Delve", "Discern", "Endure", "Evade", "Hunt", "Kill", "Mend", "Sneak"],
         resistances: ["Blood", "Echo", "Fortune", "Mind", "Supplies"]

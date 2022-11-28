@@ -2,36 +2,23 @@
    import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
    import { mastery, participantChoices, difficulty, resistance, dice, stressBonus } from "../../stores"
    import Checktangle from "./Checktangle.svelte";
-   import DocRollConfig from "./DocRollConfig.svelte";
    import Adversary from "./Adversary.svelte";
    import DiceControl from "./DiceControl.svelte";
    import { TJSDocument, TJSDocumentCollection }  from '@typhonjs-fvtt/runtime/svelte/store';
+   import ParticipantsControl from './ParticipantsControl.svelte';
 
    export let elementRoot;
 
    const domains = CONFIG.resistanceRoller.domains;
    const skills = CONFIG.resistanceRoller.skills;
    const resistances = CONFIG.resistanceRoller.resistances;
-
-   // Get what helper characters we should show
-   const users = new TJSDocumentCollection(game.users);
-   $: activeUsers = $users.filter(u => u.active);
-   $: activeCharacters = activeUsers.map(u => u.character).filter(c => c);
-
    // Get what adversary we should show
-   export let adversaryActor;
-   $: currentAdversary = adversaryActor ? new TJSDocument(adversaryActor) : null;
+   export let actor;
+   $: actore = actor ? new TJSDocument(actor) : null;
 
    // Helpers for tracking stuff
-   const togglePresence = (in_store, value) => (() => {
-      in_store.update(current => {
-         if(current.includes(value)) {
-            return current.filter(x => x != value);
-         } else {
-            return [...current, value];
-         }
-      })
-   });
+   // Iterator for our roll dice
+   $: rollDice = [].fill(null, 0, 4);
 
 </script>
 
@@ -42,19 +29,16 @@
 <!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
    <main>
-      <h1 class="header">Resistance Roll</h1>
       <div class="box adversary">
-         {#if $currentAdversary}
-            <Adversary></Adversary>
+         {#if actor}
+            <Adversary actore={actore}/>
          {:else}
             <span>NO TRACKED ADVERSARY</span>
          {/if}
       </div>
       <div class="box participants"> 
          <h2>Participants</h2>
-         {#each activeCharacters as pc}
-            <Checktangle label={pc.name} selected={$participantChoices.includes(pc.id)} on:click={togglePresence(participantChoices, pc.id)} />
-         {/each}
+         <ParticipantsControl />
       </div>
       <div class="box difficulty">
          <h2>Difficulty</h2>
@@ -88,8 +72,9 @@
          <DiceControl dice={dice} stressBonus={stressBonus} />
       </div>
       <div class="box the-roll">
+         <h2>Roll</h2>
          <div class="dice-pool">
-            {#each [1,2,3] as _, i}
+            {#each [1,2,3,4,5] as _, i}
                <img src="icons/dice/d10black.svg">
             {/each}
          </div>
@@ -111,46 +96,46 @@
 
    main {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: 50px 1fr 1fr;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      grid-template-rows: 1fr 1fr;
       gap: 5px 5px;
    }
 
-   .header {
-      text-align: center;
-      grid-column: 1 / 6;
-      grid-row: 1;
-   }
    .adversary {
-      grid-column: 1 / 3;
-      grid-row: 2;
+      grid-column: 1;
+      grid-row: 1 / 3;
    }
    .skilldom {
-      grid-column: 3;
-      grid-row: 2;
+      grid-column: 2;
+      grid-row: 1;
 
       display: grid;
       grid-template-rows: repeat(3, 1fr);
    }
    .participants {
-      grid-column: 4;
-      grid-row: 2;
+      grid-column: 3;
+      grid-row: 1;
    }
    .stress-dice {
-      grid-column: 3;
-      grid-row: 3;
+      grid-column: 2;
+      grid-row: 2;
 
    }
    .the-roll {
-      grid-column: 5;
-      grid-row: 3;
+      grid-column: 4;
+      grid-row: 2;
+
+      h2 {
+         width: 100%;
+      }
 
       .dice-pool {
          display: flex;
 
          img {
+            width: 64px;
             border: none;
-            margin-left: -45%;
+            margin-left: -48px;
             filter: opacity(40%);
          }
 
@@ -159,13 +144,15 @@
             filter: none;
          }
       }
+
+      align-items: center;
    }
    .difficulty {
-      grid-column: 5;
-      grid-row: 2;
+      grid-column: 4;
+      grid-row: 1;
    }
    .stress-track {
-      grid-column: 4;
-      grid-row: 3;
+      grid-column: 3;
+      grid-row: 2;
    }
 </style>
