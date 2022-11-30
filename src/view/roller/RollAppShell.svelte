@@ -1,11 +1,14 @@
+<!-- This is necessary for Svelte to generate accessors TRL can access for `elementRoot` -->
+<svelte:options accessors={true} />
+
 <script>
-   import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
-   import { mastery, selectedDomain, selectedSkill, difficulty, resistance, dice, stressBonus } from "../../stores"
+   import { ApplicationShell } from "@typhonjs-fvtt/runtime/svelte/component/core";
+   import { mastery, selectedDomain, selectedSkill, difficulty, resistance, dice, stressBonus } from "../../stores";
    import Checktangle from "./Checktangle.svelte";
    import Adversary from "./Adversary.svelte";
    import DiceControl from "./DiceControl.svelte";
-   import { TJSDocument, TJSDocumentCollection }  from '@typhonjs-fvtt/runtime/svelte/store';
-   import ParticipantsControl from './ParticipantsControl.svelte';
+   import { TJSDocument, TJSDocumentCollection } from "@typhonjs-fvtt/runtime/svelte/store";
+   import ParticipantsControl from "./ParticipantsControl.svelte";
 
    export let elementRoot;
 
@@ -22,21 +25,18 @@
    $: rollDice = new Array(4).fill(0);
 </script>
 
-<!-- This is necessary for Svelte to generate accessors TRL can access for `elementRoot` -->
-<svelte:options accessors={true}/>
-
 <!-- ApplicationShell provides the popOut / application shell frame, header bar, content areas -->
 <!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
    <main>
       <div class="box adversary">
          {#if actor}
-            <Adversary actore={actore}/>
+            <Adversary {actore} />
          {:else}
             <span>NO TRACKED ADVERSARY</span>
          {/if}
       </div>
-      <div class="box participants"> 
+      <div class="box participants">
          <h2>Participants</h2>
          <ParticipantsControl />
       </div>
@@ -51,45 +51,44 @@
          {#each resistances as res}
             <Checktangle label={res} selected={$resistance == res} on:click={() => resistance.set(res)} />
          {/each}
-
       </div>
       <div class="box skilldom">
          <div>
             <h2>Skill</h2>
             <select bind:value={$selectedSkill}>
-            {#each skills as s}
-               <option value={s}>
-                  {s.toUpperCase()}
-               </option>
-            {/each}
+               {#each skills as s}
+                  <option value={s}>
+                     {s.toUpperCase()}
+                  </option>
+               {/each}
             </select>
          </div>
-      
+
          <div>
             <h2>Domain</h2>
             <select bind:value={$selectedDomain}>
-            {#each domains as d}
-               <option value={d}>
-                  {d.toUpperCase()}
-               </option>
-            {/each}
+               {#each domains as d}
+                  <option value={d}>
+                     {d.toUpperCase()}
+                  </option>
+               {/each}
             </select>
          </div>
 
          <div>
             <h2>Mastery</h2>
-            <Checktangle label={"Mastery"} selected={$mastery} on:click={() => mastery.update(x => !x)} />
+            <Checktangle label={"Mastery"} selected={$mastery} on:click={() => mastery.update((x) => !x)} />
          </div>
       </div>
       <div class="box stress-dice">
          <h2>Danger</h2>
-         <DiceControl dice={dice} stressBonus={stressBonus} />
+         <DiceControl {dice} {stressBonus} />
       </div>
       <div class="box the-roll">
          <h2>Roll</h2>
          <div class="dice-pool">
             {#each rollDice as _}
-               <img src="icons/dice/d10black.svg">
+               <img src="icons/dice/d10black.svg" />
             {/each}
          </div>
       </div>
@@ -134,7 +133,6 @@
    .stress-dice {
       grid-column: 2;
       grid-row: 2;
-
    }
    .the-roll {
       grid-column: 4;

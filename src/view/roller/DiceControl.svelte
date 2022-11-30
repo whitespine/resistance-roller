@@ -29,25 +29,25 @@
 </script>
 
 <div on:click={incrementDice} on:contextmenu|preventDefault={decrementDice}>
-    <img src={diceIcon}>
-    {#if $stressBonus > 0}
-    <span>D{$dice} + {$stressBonus}</span>
-    {:else}
-    <span>D{$dice}</span>
-    {/if}
+   <img src={diceIcon} />
+   {#if $stressBonus > 0}
+      <span>D{$dice} + {$stressBonus}</span>
+   {:else}
+      <span>D{$dice}</span>
+   {/if}
 </div>
 
 <style lang="scss">
-    div {
-        display: flex;
-        flex-direction: column;
-    }
-    span {
-        text-align: center;
-        font-weight: bold;
-    }
-    img {
+   div {
+      display: flex;
+      flex-direction: column;
+   }
+   span {
+      text-align: center;
+      font-weight: bold;
+   }
+   img {
       border: none;
       margin-bottom: -25px;
-    }
+   }
 </style>
