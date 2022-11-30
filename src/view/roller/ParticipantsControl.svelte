@@ -1,7 +1,7 @@
 <script>
    import { participantChoices } from "../../stores";
    import { TJSDocumentCollection } from "@typhonjs-fvtt/runtime/svelte/store";
-   import Checktangle from "./Checktangle.svelte";
+   import Checktangle from "../components/Checktangle.svelte";
    import { presenceToggler } from "../../util";
 
    // Get what helper characters we should show

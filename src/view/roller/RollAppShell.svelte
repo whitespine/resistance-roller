@@ -4,7 +4,8 @@
 <script>
    import { ApplicationShell } from "@typhonjs-fvtt/runtime/svelte/component/core";
    import { mastery, selectedDomain, selectedSkill, difficulty, resistance, dice, stressBonus } from "../../stores";
-   import Checktangle from "./Checktangle.svelte";
+   import Checktangle from "../components/Checktangle.svelte";
+   import Dropdown from "../components/Dropdown.svelte";
    import Adversary from "./Adversary.svelte";
    import DiceControl from "./DiceControl.svelte";
    import { TJSDocument, TJSDocumentCollection } from "@typhonjs-fvtt/runtime/svelte/store";
@@ -55,17 +56,13 @@
       <div class="box skilldom">
          <div>
             <h2>Skill</h2>
-            <select bind:value={$selectedSkill}>
-               {#each skills as s}
-                  <option value={s}>
-                     {s.toUpperCase()}
-                  </option>
-               {/each}
-            </select>
+            <Dropdown value={$selectedSkill} options={skills} on:change={(e) => $selectedSkill = e.detail } let:value={skillOption}>
+               <span>Use {skillOption}</span>
+            </Dropdown>
          </div>
 
          <div>
-            <h2>Domain</h2>
+            <h2>Domain</h2> 
             <select bind:value={$selectedDomain}>
                {#each domains as d}
                   <option value={d}>

@@ -1,0 +1,19 @@
+.dropdown {
+    .options {
+        div {
+            border: solid 1px black;
+            padding: 3px;
+            margin-bottom: -1px;
+        }
+        margin: 3px;
+        font-size: large;
+        background-color: white;
+
+    }
+    position: absolute;
+    z-index: 1001;
+    will-change: top, left;
+    transform-origin: left top 0px;
+    overflow: inherit;
+    box-sizing: border-box;
+}

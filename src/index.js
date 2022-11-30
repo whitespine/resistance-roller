@@ -3,6 +3,8 @@ import { listenSockets } from "./socket_store";
 import MenuApp from './view/MenuApp.js';
 import { constants } from './constants.js';
 
+import "../styles/headless.scss";
+
 Hooks.once('ready', () => {
     const sidebarRect = document.querySelector('#sidebar').getBoundingClientRect();
     new MenuApp({ left: sidebarRect.x - 235, top: sidebarRect.y }).render(true, { focus: true });

@@ -11,10 +11,12 @@
   "dependencies": {
     "@typhonjs-fvtt/runtime": "^0.0.20",
     "@typhonjs-fvtt/svelte-standard": "^0.0.16",
-    "svelte": "^3.52.0"
+    "svelte": "^3.52.0",
+    "svelte-portal": "^2.2.0"
   },
   "devDependencies": {
     "@league-of-foundry-developers/foundry-vtt-types": "^9.280.0",
+    "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@typhonjs-config/eslint-config": "^0.3.0",
     "@typhonjs-fvtt/eslint-config-foundry.js": "^0.8.0",
     "eslint": "^8",
