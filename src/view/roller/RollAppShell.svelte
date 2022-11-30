@@ -1,6 +1,6 @@
 <script>
    import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
-   import { mastery, participantChoices, difficulty, resistance, dice, stressBonus } from "../../stores"
+   import { mastery, selectedDomain, selectedSkill, difficulty, resistance, dice, stressBonus } from "../../stores"
    import Checktangle from "./Checktangle.svelte";
    import Adversary from "./Adversary.svelte";
    import DiceControl from "./DiceControl.svelte";
@@ -12,14 +12,14 @@
    const domains = CONFIG.resistanceRoller.domains;
    const skills = CONFIG.resistanceRoller.skills;
    const resistances = CONFIG.resistanceRoller.resistances;
+
    // Get what adversary we should show
    export let actor;
    $: actore = actor ? new TJSDocument(actor) : null;
 
    // Helpers for tracking stuff
    // Iterator for our roll dice
-   $: rollDice = [].fill(null, 0, 4);
-
+   $: rollDice = new Array(4).fill(0);
 </script>
 
 <!-- This is necessary for Svelte to generate accessors TRL can access for `elementRoot` -->
@@ -56,10 +56,24 @@
       <div class="box skilldom">
          <div>
             <h2>Skill</h2>
+            <select bind:value={$selectedSkill}>
+            {#each skills as s}
+               <option value={s}>
+                  {s.toUpperCase()}
+               </option>
+            {/each}
+            </select>
          </div>
       
          <div>
             <h2>Domain</h2>
+            <select bind:value={$selectedDomain}>
+            {#each domains as d}
+               <option value={d}>
+                  {d.toUpperCase()}
+               </option>
+            {/each}
+            </select>
          </div>
 
          <div>
@@ -74,7 +88,7 @@
       <div class="box the-roll">
          <h2>Roll</h2>
          <div class="dice-pool">
-            {#each [1,2,3,4,5] as _, i}
+            {#each rollDice as _}
                <img src="icons/dice/d10black.svg">
             {/each}
          </div>
@@ -88,6 +102,7 @@
       display: flex;
       flex-direction: column;
       border: 1px solid black;
+      min-width: 0px;
 
       h2 {
          text-align: center;

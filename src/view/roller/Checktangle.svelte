@@ -1,30 +1,32 @@
 <script>
-    export let label = "PLACEHOLDER";
-    export let selected = false;
+   export let label = "PLACEHOLDER";
+   export let selected = false;
 </script>
 
-
 <button class:selected on:click>
-    { label }
+   {label}
 </button>
 
 <style lang="scss">
-    button {
-        // font-family: "MelmaCracked";
-        font-size: 1.3em;
-        text-transform: uppercase;
-        color: #B0B0B0;
+   button {
+      // font-family: "MelmaCracked";
+      font-size: 1.3em;
+      text-transform: uppercase;
+      color: #b0b0b0;
 
-        border: 0;
-        font-weight: bold;
-        margin: 2px;
-        padding: 2px;
-        background-color: #834040;
-    }
+      border: 0;
+      font-weight: bold;
+      margin: 2px;
+      padding: 2px;
+      background-color: #834040;
 
-    button.selected {
-        background-color: #630000;
-        color: #F0F0F0;
-    }
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+   }
 
+   button.selected {
+      background-color: #630000;
+      color: #f0f0f0;
+   }
 </style>
