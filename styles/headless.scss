@@ -3,7 +3,11 @@
         div {
             border: solid 1px black;
             padding: 3px;
-            margin-bottom: -1px;
+            margin-bottom: -0px;
+
+            &:hover {
+                border: solid 2px orange;
+            }
         }
         margin: 3px;
         font-size: large;
@@ -16,4 +20,16 @@
     transform-origin: left top 0px;
     overflow: inherit;
     box-sizing: border-box;
+}
+
+.text--dramatic {
+    font-size: 1.3em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.text--nowrap {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }

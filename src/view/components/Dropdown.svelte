@@ -29,9 +29,9 @@
    }
 </script>
 
-<div bind:this={root}>
+<div class="dropdown-root" bind:this={root}>
    <Listbox {value} on:change let:open>
-      <ListboxButton>{value}</ListboxButton>
+      <ListboxButton class="text--dramatic">{value}</ListboxButton>
       <Portal target="body">
          {#if open}
             <div class="dropdown" transition:fade={{ duration: 200 }} style="left: {left}px; top: {top}px; width: {width}px">

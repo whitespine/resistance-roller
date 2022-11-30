@@ -3,26 +3,17 @@
    export let selected = false;
 </script>
 
-<button class:selected on:click>
+<button class:selected class="text--nowrap text--dramatic" on:click>
    {label}
 </button>
 
 <style lang="scss">
    button {
       // font-family: "MelmaCracked";
-      font-size: 1.3em;
-      text-transform: uppercase;
-      color: #b0b0b0;
-
       border: 0;
-      font-weight: bold;
-      margin: 2px;
-      padding: 2px;
-      background-color: #834040;
 
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+      background-color: #834040;
+      color: #b0b0b0;
    }
 
    button.selected {
