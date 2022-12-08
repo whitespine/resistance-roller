@@ -8,11 +8,9 @@
    import Dropdown from "../components/Dropdown.svelte";
    import Adversary from "./Adversary.svelte";
    import DiceControl from "./DiceControl.svelte";
-   import { TJSDocument, TJSDocumentCollection } from "@typhonjs-fvtt/runtime/svelte/store";
    import ParticipantsControl from "./ParticipantsControl.svelte";
    import { constants } from "../../constants";
    import { nullable_tjs_doc } from "../../doc_store";
-   import { each } from "svelte/internal";
 
    export let elementRoot;
 
@@ -38,7 +36,6 @@
       adversaryDomains = $adverstorey?.flags[constants.moduleId]?.domains ?? [];
       playerSkills = Object.fromEntries(Object.entries($playerCharactore?.system.skills ?? {}).map(kv => [kv[0], kv[1].value]));
       playerDomains = Object.fromEntries(Object.entries($playerCharactore?.system.domains ?? {}).map(kv => [kv[0], kv[1].value]));
-      let playerProtections = Object.entries(Object.entries($playerCharactore?.system.resistances ?? {}).map(kv => [kv[0], kv[1].protection]));
 
       dicePool = 1;
       dicePool += playerSkills[$selectedSkill] ? 1 : 0;
@@ -71,9 +68,22 @@
          <h2>Resistance</h2>
          {#each resistances as res}
             <Checktangle label={res} selected={$resistance == res} on:click={() => resistance.set(res)} >
-                  <div class="choice-hints" slot="left">
-                     {#each new Array($playerCharactore?.system.resistances[res].protections ?? 0) as _, i}
-                        <i class="fas fa-2xs fa-shield"> </i>
+                  <div class="prot-hints" slot="left">
+                     {#each new Array(6) as _, i}
+                        {#if i < $playerCharactore?.system.resistances[res].protection ?? 0}
+                           <i class="fas fa-2xs fa-shield"> </i>
+                        {:else}
+                           <i class="fa-light fa-2xs fa-shield"> </i>
+                        {/if}
+                     {/each}
+                  </div>
+                  <div class="stress-hints" slot="right">
+                     {#each new Array(12) as _, i}
+                        {#if i < $playerCharactore?.system.resistances[res].value ?? 0}
+                           <i class="fa-solid fa-2xs fa-square"> </i>
+                        {:else}
+                           <i class="fa-sharp fa-2xs fa-square"> </i>
+                        {/if}
                      {/each}
                   </div>
             </Checktangle>
@@ -195,6 +205,26 @@
       grid-template-rows: 14px 14px;
       i {
          margin-top: 6px;
+      }
+   }
+   .prot-hints {
+      display: grid;
+      border-right: 1px black solid;
+      grid-template-columns: repeat(3, 14px);
+      grid-template-rows: 14px 14px;
+      i {
+         margin-top: 6px;
+         margin-left: -3px;
+      }
+   }
+   .stress-hints {
+      display: grid;
+      border-left: 1px black solid;
+      grid-template-columns: repeat(4, 10px);
+      grid-template-rows: repeat(3, 10px);
+      i {
+         margin-top: 6px;
+         margin-right: -3px;
       }
    }
 </style>

@@ -40,7 +40,7 @@
       <span>{actorOption.name}</span>
    </Dropdown>
    <div class="portrait">
-      <img src={img} />
+      <img src={img} style="width: 100%"/>
    </div>
    <div class="progress-bar">
       <div class="progress" style="width: {(100 * currentResistance) / maxResistance}%" />
