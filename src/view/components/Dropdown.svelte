@@ -31,13 +31,16 @@
 
 <div class="dropdown-root" bind:this={root}>
    <Listbox {value} on:change let:open>
-      <ListboxButton class="text--dramatic">{value}</ListboxButton>
+      <ListboxButton as="div">
+         <slot value={value}> 
+         </slot>
+      </ListboxButton>
       <Portal target="body">
          {#if open}
             <div class="dropdown" transition:fade={{ duration: 200 }} style="left: {left}px; top: {top}px; width: {width}px">
                <ListboxOptions static as="div" class="options flexcol">
                   {#each options as opt}
-                     <ListboxOption as="div" class="test" value={opt}>
+                     <ListboxOption as="div" value={opt}>
                         <slot value={opt}>
                            <span>{opt}</span>
                         </slot>

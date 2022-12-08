@@ -3,9 +3,23 @@
    export let selected = false;
 </script>
 
-<button class:selected class="text--nowrap text--dramatic" on:click>
-   {label}
-</button>
+<div> 
+   <button class:selected class="text--nowrap text--dramatic" on:click>
+      {#if $$slots.left}
+         <div style="float: left">
+            <slot name="left" />
+         </div>
+      {/if}
+
+      {label}
+
+      {#if $$slots.right}
+         <div style="float: right">
+            <slot name="right" />
+         </div>
+      {/if}
+   </button>
+</div>
 
 <style lang="scss">
    button {
@@ -14,6 +28,8 @@
 
       background-color: #834040;
       color: #b0b0b0;
+
+      margin: 2px;
    }
 
    button.selected {

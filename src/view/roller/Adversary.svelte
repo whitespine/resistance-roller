@@ -1,15 +1,31 @@
 <script>
    import { constants } from "../../constants";
+   import { createEventDispatcher } from "svelte";
 
    export let actore; // A TJSDocument of an actor
+
+   const dispatch = createEventDispatcher();
+	function selectActor(actorId) {
+		dispatch('select-actor', {
+         actor: game.actors.get(actorId)
+		});
+	}
+
+   // Derive some things to show
    $: flags = $actore.flags[constants.moduleId];
    $: currentResistance = flags?.current_resistance ?? 0;
    $: maxResistance = flags?.max_resistance ?? constants.defaultMaxResistance;
    $: domains = flags?.domains ?? [];
+
 </script>
 
 <div class="main">
-   <h2 class="name">{$actore.name}</h2>
+   <h2 class="name">
+      <span>
+         {$actore.name}
+      </span>
+      <i class="fas fa-ellipsis-vertical" style="float: right; cursor: pointer; padding-right: 10px;"></i>
+   </h2>
    <div class="portrait">
       <img src={$actore.img} />
    </div>

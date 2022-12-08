@@ -1,16 +1,15 @@
 .dropdown {
     .options {
-        div {
+        [role="option"] {
+            text-align: center;
             border: solid 1px black;
-            padding: 3px;
             margin-bottom: -0px;
 
             &:hover {
-                border: solid 2px orange;
+                border: solid 1px orange;
+                box-shadow: 0 0 8px red;
             }
         }
-        margin: 3px;
-        font-size: large;
         background-color: white;
 
     }

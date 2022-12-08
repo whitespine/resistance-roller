@@ -10,6 +10,7 @@
    import DiceControl from "./DiceControl.svelte";
    import { TJSDocument, TJSDocumentCollection } from "@typhonjs-fvtt/runtime/svelte/store";
    import ParticipantsControl from "./ParticipantsControl.svelte";
+   import { constants } from "../../constants";
 
    export let elementRoot;
 
@@ -19,7 +20,18 @@
 
    // Get what adversary we should show
    export let actor;
-   $: actore = actor ? new TJSDocument(actor) : null;
+   let actore = null;
+   let adversarySkills = []; 
+   let adversaryDomains = []; 
+   let playerSkills = [];
+   let playerDomains = ["Religion"];
+   let dicePool = 0;
+   $: {
+      actore = actor ? new TJSDocument(actor) : null;
+      adversarySkills = $actore.flags[constants.moduleId]?.skills ?? [];
+      adversaryDomains = $actore.flags[constants.moduleId]?.domains ?? [];
+      console.log(adversaryDomains);
+   }
 
    // Helpers for tracking stuff
    // Iterator for our roll dice
@@ -57,19 +69,33 @@
          <div>
             <h2>Skill</h2>
             <Dropdown value={$selectedSkill} options={skills} on:change={(e) => $selectedSkill = e.detail } let:value={skillOption}>
-               <span>Use {skillOption}</span>
+               <Checktangle label={skillOption} selected=false>
+                  <div class="choice-hints" slot="left">
+                     {#if adversarySkills.includes(skillOption)}
+                        <i class="fas fa-2xs fa-skull"> </i>
+                     {/if}
+                     {#if playerSkills.includes(skillOption)}
+                        <i class="fas fa-2xs fa-user"> </i>
+                     {/if}
+                  </div>
+               </Checktangle>
             </Dropdown>
          </div>
 
          <div>
             <h2>Domain</h2> 
-            <select bind:value={$selectedDomain}>
-               {#each domains as d}
-                  <option value={d}>
-                     {d.toUpperCase()}
-                  </option>
-               {/each}
-            </select>
+            <Dropdown value={$selectedDomain} options={domains} on:change={(e) => $selectedDomain = e.detail } let:value={domainOption}>
+               <Checktangle label={domainOption} selected=false>
+                  <div class="choice-hints" slot="left">
+                     {#if adversaryDomains.includes(domainOption)}
+                        <i class="fas fa-2xs fa-skull"> </i>
+                     {/if}
+                     {#if playerDomains.includes(domainOption)}
+                        <i class="fas fa-2xs fa-user"> </i>
+                     {/if}
+                  </div>
+               </Checktangle>
+            </Dropdown>
          </div>
 
          <div>
@@ -107,7 +133,7 @@
 
    main {
       display: grid;
-      grid-template-columns: 2fr repeat(3, 1fr);
+      grid-template-columns: 280px repeat(3, 1fr);
       grid-template-rows: 1fr 1fr;
       gap: 5px 5px;
    }
@@ -164,5 +190,13 @@
    .stress-track {
       grid-column: 3;
       grid-row: 2;
+   }
+   .choice-hints {
+      display: grid;
+      grid-template-columns: 14px;
+      grid-template-rows: 14px 14px;
+      i {
+         margin-top: 6px;
+      }
    }
 </style>
