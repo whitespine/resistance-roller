@@ -20,17 +20,15 @@
 
    // Get what adversary we should show
    export let actor;
-   let actore = null;
+   let actore = new TJSDocument(actor);
    let adversarySkills = []; 
    let adversaryDomains = []; 
    let playerSkills = [];
    let playerDomains = ["Religion"];
    let dicePool = 0;
    $: {
-      actore = actor ? new TJSDocument(actor) : null;
       adversarySkills = $actore.flags[constants.moduleId]?.skills ?? [];
       adversaryDomains = $actore.flags[constants.moduleId]?.domains ?? [];
-      console.log(adversaryDomains);
    }
 
    // Helpers for tracking stuff
@@ -41,14 +39,8 @@
 <!-- ApplicationShell provides the popOut / application shell frame, header bar, content areas -->
 <!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
-   <main>
-      <div class="box adversary">
-         {#if actor}
-            <Adversary {actore} />
-         {:else}
-            <span>NO TRACKED ADVERSARY</span>
-         {/if}
-      </div>
+   <main class="resist-roller">
+      <Adversary class="box adversary" actor={$actore} on:select-actor={(x) => $actore = x.detail } />
       <div class="box participants">
          <h2>Participants</h2>
          <ParticipantsControl />
@@ -116,21 +108,13 @@
          </div>
       </div>
    </main>
+
+   {#if false}
+      <div class="adversary"/> 
+   {/if}
 </ApplicationShell>
 
 <style lang="scss">
-   .box {
-      padding: 3px;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid black;
-      min-width: 0px;
-
-      h2 {
-         text-align: center;
-      }
-   }
-
    main {
       display: grid;
       grid-template-columns: 280px repeat(3, 1fr);
@@ -138,10 +122,6 @@
       gap: 5px 5px;
    }
 
-   .adversary {
-      grid-column: 1;
-      grid-row: 1 / 3;
-   }
    .skilldom {
       grid-column: 2;
       grid-row: 1;

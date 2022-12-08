@@ -1,33 +1,46 @@
 <script>
    import { constants } from "../../constants";
    import { createEventDispatcher } from "svelte";
+   import { TJSDocumentCollection } from "@typhonjs-fvtt/runtime/svelte/store";
+   import Dropdown from "../components/Dropdown.svelte";
 
-   export let actore; // A TJSDocument of an actor
+   /** @type { Actor } */
+   export let actor = null;
 
+   // Establish our callback for changing the actor
    const dispatch = createEventDispatcher();
-	function selectActor(actorId) {
-		dispatch('select-actor', {
-         actor: game.actors.get(actorId)
-		});
-	}
+	function selectActor(actor) {
+		dispatch('select-actor', actor); 
+   }
 
-   // Derive some things to show
-   $: flags = $actore.flags[constants.moduleId];
+   // Establish our store for observing all actors
+   /** @type { Array<Actor> } */
+   const allActors = new TJSDocumentCollection(game.actors);
+
+   // Derive properties from current actor
+   $: name = actor?.name ?? "Nobody";
+   $: img = actor?.img ?? "icons/svg/mystery-man.svg";
+   $: flags = actor?.flags[constants.moduleId];
    $: currentResistance = flags?.current_resistance ?? 0;
    $: maxResistance = flags?.max_resistance ?? constants.defaultMaxResistance;
    $: domains = flags?.domains ?? [];
 
+   // Derive options
+   $: actorOptions = $allActors.filter(a => a.flags[constants.moduleId]?.tracked);
 </script>
 
-<div class="main">
-   <h2 class="name">
-      <span>
-         {$actore.name}
-      </span>
-      <i class="fas fa-ellipsis-vertical" style="float: right; cursor: pointer; padding-right: 10px;"></i>
-   </h2>
+<div class="{$$props.class} main">
+   <Dropdown class="name-selector" value={"foo"} options={actorOptions} let:value={actorOption} on:change={(e) => selectActor(e.detail )}>
+      <h2 class="name" slot="button">
+         <span>
+            {name}
+         </span>
+         <i class="fas fa-ellipsis-vertical" style="float: right; cursor: pointer; padding-right: 10px;"></i>
+      </h2>
+      <span>{actorOption.name}</span>
+   </Dropdown>
    <div class="portrait">
-      <img src={$actore.img} />
+      <img src={img} />
    </div>
    <div class="progress-bar">
       <div class="progress" style="width: {(100 * currentResistance) / maxResistance}%" />
@@ -50,7 +63,6 @@
 
    .name {
       text-align: center;
-      grid-column: 1 / 3;
    }
 
    .portrait {

@@ -13,6 +13,7 @@
    // Get what adversary we should show
    export let options;
    export let value;
+   export let width_override = null;
    let root = null;
    let left = 0;
    let top = 0;
@@ -23,21 +24,23 @@
          let rect = root.getBoundingClientRect();
          left = rect.left + window.scrollX;
          top = rect.bottom + window.scrollY;
-         width = rect.right - rect.left;
-
+         width = width_override ?? (rect.right - rect.left);
       }
    }
 </script>
 
-<div class="dropdown-root" bind:this={root}>
+<div class="{$$props.class ?? ""} dropdown-root" bind:this={root}>
    <Listbox {value} on:change let:open>
       <ListboxButton as="div">
-         <slot value={value}> 
-         </slot>
+         {#if $$slots.button}
+            <slot value={value} name=button></slot>
+         {:else}
+            <slot value={value}></slot>
+         {/if}
       </ListboxButton>
       <Portal target="body">
          {#if open}
-            <div class="dropdown" transition:fade={{ duration: 200 }} style="left: {left}px; top: {top}px; width: {width}px">
+            <div class="resist-roller dropdown" transition:fade={{ duration: 200 }} style="left: {left}px; top: {top}px; width: {width}px">
                <ListboxOptions static as="div" class="options flexcol">
                   {#each options as opt}
                      <ListboxOption as="div" value={opt}>
