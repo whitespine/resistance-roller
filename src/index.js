@@ -12,17 +12,17 @@ Hooks.once('ready', () => {
     listenSockets();
 });
 
-Hooks.once('init', async function() {
+Hooks.once('init', async function () {
     // Make a bind to summon the roller
     game.keybindings.register("resistance-roller", "start-roll", {
-				name: "Initiate resistance roll",
-				onDown: () => {
-                    new RollApp().render(true, {focus: true});
-				},
-				onUp: () => {},
-				precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
-			});
-    
+        name: "Initiate resistance roll",
+        onDown: () => {
+            new RollApp().render(true, { focus: true });
+        },
+        onUp: () => { },
+        precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+    });
+
     // Set up api access
     game[constants.moduleId] = {
         RollApp,
@@ -30,11 +30,41 @@ Hooks.once('init', async function() {
     };
 
     // Set up some basic configurable options
-    CONFIG.resistanceRoller = { 
-        domains: ["Cursed", "Desolate", "Haven", "Occult", "Religion", "Technology", "Warren", "Wild"],
-        skills: ["Compel", "Delve", "Discern", "Endure", "Evade", "Hunt", "Kill", "Mend", "Sneak"],
-        resistances: ["Blood", "Echo", "Fortune", "Mind", "Supplies"]
-    }; 
+    CONFIG[constants.moduleId] = {
+        domains_map: {
+            "cursed": "Cursed",
+            "desolate": "Desolate",
+            "haven": "Haven",
+            "occult": "Occult",
+            "religion": "Religion",
+            "technology": "Technology",
+            "warren": "Warren",
+            "wild": "Wild"
+        },
+
+        skills_map: {
+            "compel": "Compel",
+            "delve": "Delve",
+            "discern": "Discern",
+            "endure": "Endure",
+            "evade": "Evade",
+            "hunt": "Hunt",
+            "kill": "Kill",
+            "mend": "Mend",
+            "sneak": "Sneak"
+        },
+
+        resistances_map: {
+            "blood": "Blood",
+            "echo": "Echo",
+            "fortune": "Fortune",
+            "mind": "Mind",
+            "supplies": "Supplies"
+        }
+    };
+    CONFIG[constants.moduleId].domains = Object.keys(CONFIG[constants.moduleId].domains_map);
+    CONFIG[constants.moduleId].skills = Object.keys(CONFIG[constants.moduleId].skills_map);
+    CONFIG[constants.moduleId].resistances = Object.keys(CONFIG[constants.moduleId].resistances_map);
 });
 
 Hooks.on('getActorDirectoryEntryContext', (html, entries) => {
@@ -45,7 +75,7 @@ Hooks.on('getActorDirectoryEntryContext', (html, entries) => {
         callback: ([li]) => {
             let actor = game.actors.get(li.dataset.documentId);
             let tracked = actor.flags[constants.moduleId]?.tracked ?? false;
-            actor.update({[`flags.${constants.moduleId}.tracked`]: !tracked});
+            actor.update({ [`flags.${constants.moduleId}.tracked`]: !tracked });
         }
     })
 })

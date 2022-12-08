@@ -11,28 +11,38 @@
    import { TJSDocument, TJSDocumentCollection } from "@typhonjs-fvtt/runtime/svelte/store";
    import ParticipantsControl from "./ParticipantsControl.svelte";
    import { constants } from "../../constants";
+   import { nullable_tjs_doc } from "../../doc_store";
+   import { each } from "svelte/internal";
 
    export let elementRoot;
 
-   const domains = CONFIG.resistanceRoller.domains;
-   const skills = CONFIG.resistanceRoller.skills;
-   const resistances = CONFIG.resistanceRoller.resistances;
+   const domains = CONFIG[constants.moduleId].domains;
+   const skills = CONFIG[constants.moduleId].skills;
+   const resistances = CONFIG[constants.moduleId].resistances;
 
    // Get what adversary we should show
-   export let actor;
-   let actore = new TJSDocument(actor);
+   export let adversary = null;
+   let adverstorey = nullable_tjs_doc(adversary);
+
+   // Don't bother handling player character changing mid-interaction. Grab pc
+   let playerCharactore = nullable_tjs_doc(game.user.character);
+
+   // Reactive props
    let adversarySkills = []; 
    let adversaryDomains = []; 
    let playerSkills = [];
-   let playerDomains = ["Religion"];
+   let playerDomains = [];
    let dicePool = 1;
    $: {
-      adversarySkills = $actore.flags[constants.moduleId]?.skills ?? [];
-      adversaryDomains = $actore.flags[constants.moduleId]?.domains ?? [];
+      adversarySkills = $adverstorey?.flags[constants.moduleId]?.skills ?? [];
+      adversaryDomains = $adverstorey?.flags[constants.moduleId]?.domains ?? [];
+      playerSkills = Object.fromEntries(Object.entries($playerCharactore?.system.skills ?? {}).map(kv => [kv[0], kv[1].value]));
+      playerDomains = Object.fromEntries(Object.entries($playerCharactore?.system.domains ?? {}).map(kv => [kv[0], kv[1].value]));
+      let playerProtections = Object.entries(Object.entries($playerCharactore?.system.resistances ?? {}).map(kv => [kv[0], kv[1].protection]));
 
       dicePool = 1;
-      dicePool += playerSkills.includes($selectedSkill) ? 1 : 0;
-      dicePool += playerDomains.includes($selectedDomain) ? 1 : 0;
+      dicePool += playerSkills[$selectedSkill] ? 1 : 0;
+      dicePool += playerDomains[$selectedDomain] ? 1 : 0;
       dicePool += $mastery ? 1 : 0;
       dicePool -= $difficulty;
    }
@@ -46,7 +56,7 @@
 <!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
    <main class="resist-roller">
-      <Adversary class="box adversary" actor={$actore} on:select-actor={(x) => $actore = x.detail } />
+      <Adversary class="box adversary" actor={$adverstorey} on:select-actor={(x) => $adverstorey = x.detail } />
       <div class="box participants">
          <h2>Participants</h2>
          <ParticipantsControl />
@@ -60,7 +70,13 @@
       <div class="box stress-track">
          <h2>Resistance</h2>
          {#each resistances as res}
-            <Checktangle label={res} selected={$resistance == res} on:click={() => resistance.set(res)} />
+            <Checktangle label={res} selected={$resistance == res} on:click={() => resistance.set(res)} >
+                  <div class="choice-hints" slot="left">
+                     {#each new Array($playerCharactore?.system.resistances[res].protections ?? 0) as _, i}
+                        <i class="fas fa-2xs fa-shield"> </i>
+                     {/each}
+                  </div>
+            </Checktangle>
          {/each}
       </div>
       <div class="box skilldom">
@@ -72,7 +88,7 @@
                      {#if adversarySkills.includes(skillOption)}
                         <i class="fas fa-2xs fa-skull"> </i>
                      {/if}
-                     {#if playerSkills.includes(skillOption)}
+                     {#if playerSkills[skillOption]}
                         <i class="fas fa-2xs fa-user"> </i>
                      {/if}
                   </div>
@@ -88,7 +104,7 @@
                      {#if adversaryDomains.includes(domainOption)}
                         <i class="fas fa-2xs fa-skull"> </i>
                      {/if}
-                     {#if playerDomains.includes(domainOption)}
+                     {#if playerDomains[domainOption]}
                         <i class="fas fa-2xs fa-user"> </i>
                      {/if}
                   </div>

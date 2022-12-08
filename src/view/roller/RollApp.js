@@ -20,7 +20,7 @@ export default class RollApp extends SvelteApplication {
             class: RollAppShell,
             target: document.body,
             props: {
-               actor: null
+               adversary: null
             }
          }
       });
@@ -30,7 +30,7 @@ export default class RollApp extends SvelteApplication {
       return new RollApp({
          svelte: {
             props: {
-               actor
+               adversary: actor
             }
          }
       });
