@@ -6,8 +6,14 @@
 
    // Get what helper characters we should show
    const users = new TJSDocumentCollection(game.users);
-   $: activeUsers = $users.filter((u) => u.active);
-   $: activeCharacters = activeUsers.map((u) => u.character).filter((c) => c);
+   const all_actors = new TJSDocumentCollection(game.actors);
+   let activeCharacters;
+   let activeUsers;
+   $: {
+      $all_actors; // Want to watch for mutations on all actors
+      activeUsers = $users.filter((u) => u.active);
+      activeCharacters = activeUsers.map((u) => u.character).filter((c) => c);
+   }
 </script>
 
 <div>
