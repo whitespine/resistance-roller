@@ -25,15 +25,21 @@
    let adversaryDomains = []; 
    let playerSkills = [];
    let playerDomains = ["Religion"];
-   let dicePool = 0;
+   let dicePool = 1;
    $: {
       adversarySkills = $actore.flags[constants.moduleId]?.skills ?? [];
       adversaryDomains = $actore.flags[constants.moduleId]?.domains ?? [];
+
+      dicePool = 1;
+      dicePool += playerSkills.includes($selectedSkill) ? 1 : 0;
+      dicePool += playerDomains.includes($selectedDomain) ? 1 : 0;
+      dicePool += $mastery ? 1 : 0;
+      dicePool -= $difficulty;
    }
 
    // Helpers for tracking stuff
    // Iterator for our roll dice
-   $: rollDice = new Array(4).fill(0);
+   $: rollDice = new Array(dicePool).fill(0);
 </script>
 
 <!-- ApplicationShell provides the popOut / application shell frame, header bar, content areas -->
@@ -108,10 +114,6 @@
          </div>
       </div>
    </main>
-
-   {#if false}
-      <div class="adversary"/> 
-   {/if}
 </ApplicationShell>
 
 <style lang="scss">

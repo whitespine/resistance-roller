@@ -74,7 +74,7 @@ export default class MenuApp extends SvelteApplication
          height: 'auto',
          positionOrtho: false,
          transformOrigin: null,
-         title: 'EssentialESM.title',
+         title: 'Resist.menu',
          zIndex: 95,
 
          svelte: {
