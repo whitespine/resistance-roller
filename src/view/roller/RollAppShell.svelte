@@ -3,12 +3,13 @@
 
 <script>
    import { ApplicationShell } from "@typhonjs-fvtt/runtime/svelte/component/core";
-   import { mastery, selectedDomain, selectedSkill, difficulty, resistance, dice, stressBonus } from "../../stores";
+   import { mastery, selectedDomain, selectedSkill, difficulty, dice, stressBonus } from "../../stores";
    import Checktangle from "../components/Checktangle.svelte";
    import Dropdown from "../components/Dropdown.svelte";
    import Adversary from "./Adversary.svelte";
    import DiceControl from "./DiceControl.svelte";
    import ParticipantsControl from "./ParticipantsControl.svelte";
+   import ResistancePicker from "./ResistancePicker.svelte";
    import { constants } from "../../constants";
    import { nullable_tjs_doc } from "../../doc_store";
 
@@ -16,7 +17,6 @@
 
    const domains = CONFIG[constants.moduleId].domains;
    const skills = CONFIG[constants.moduleId].skills;
-   const resistances = CONFIG[constants.moduleId].resistances;
 
    // Get what adversary we should show
    export let adversary = null;
@@ -54,42 +54,21 @@
 <ApplicationShell bind:elementRoot>
    <main class="resist-roller">
       <Adversary class="box adversary" actor={$adverstorey} on:select-actor={(x) => $adverstorey = x.detail } />
-      <div class="box participants">
+      <div class="box" style="grid-column: 3; grid-row: 1">
          <h2>Participants</h2>
          <ParticipantsControl />
       </div>
-      <div class="box difficulty">
+      <div class="box" style="grid-column: 4; grid-row: 1" >
          <h2>Difficulty</h2>
          <Checktangle label="Standard" selected={$difficulty == 0} on:click={() => difficulty.set(0)} />
          <Checktangle label="Risky" selected={$difficulty == 1} on:click={() => difficulty.set(1)} />
          <Checktangle label="Dangerous" selected={$difficulty == 2} on:click={() => difficulty.set(2)} />
       </div>
-      <div class="box stress-track">
+      <div class="box" style="grid-column: 3; grid-row: 2">
          <h2>Resistance</h2>
-         {#each resistances as res}
-            <Checktangle label={res} selected={$resistance == res} on:click={() => resistance.set(res)} >
-                  <div class="prot-hints" slot="left">
-                     {#each new Array(6) as _, i}
-                        {#if i < $playerCharactore?.system.resistances[res].protection ?? 0}
-                           <i class="fas fa-2xs fa-shield"> </i>
-                        {:else}
-                           <i class="fa-light fa-2xs fa-shield"> </i>
-                        {/if}
-                     {/each}
-                  </div>
-                  <div class="stress-hints" slot="right">
-                     {#each new Array(12) as _, i}
-                        {#if i < $playerCharactore?.system.resistances[res].value ?? 0}
-                           <i class="fa-solid fa-2xs fa-square"> </i>
-                        {:else}
-                           <i class="fa-sharp fa-2xs fa-square"> </i>
-                        {/if}
-                     {/each}
-                  </div>
-            </Checktangle>
-         {/each}
+         <ResistancePicker playerCharacter={$playerCharactore}></ResistancePicker> 
       </div>
-      <div class="box skilldom">
+      <div class="box skilldom" style="grid-column: 2; grid-row: 1;">
          <div>
             <h2>Skill</h2>
             <Dropdown value={$selectedSkill} options={skills} on:change={(e) => $selectedSkill = e.detail } let:value={skillOption}>
@@ -127,7 +106,7 @@
             <Checktangle label={"Mastery"} selected={$mastery} on:click={() => mastery.update((x) => !x)} />
          </div>
       </div>
-      <div class="box stress-dice">
+      <div class="box" style="grid-row: 2; grid-column: 2">
          <h2>Danger</h2>
          <DiceControl {dice} {stressBonus} />
       </div>
@@ -151,19 +130,8 @@
    }
 
    .skilldom {
-      grid-column: 2;
-      grid-row: 1;
-
       display: grid;
       grid-template-rows: repeat(3, 1fr);
-   }
-   .participants {
-      grid-column: 3;
-      grid-row: 1;
-   }
-   .stress-dice {
-      grid-column: 2;
-      grid-row: 2;
    }
    .the-roll {
       grid-column: 4;
@@ -191,14 +159,6 @@
 
       align-items: center;
    }
-   .difficulty {
-      grid-column: 4;
-      grid-row: 1;
-   }
-   .stress-track {
-      grid-column: 3;
-      grid-row: 2;
-   }
    .choice-hints {
       display: grid;
       grid-template-columns: 14px;
@@ -207,24 +167,5 @@
          margin-top: 6px;
       }
    }
-   .prot-hints {
-      display: grid;
-      border-right: 1px black solid;
-      grid-template-columns: repeat(3, 14px);
-      grid-template-rows: 14px 14px;
-      i {
-         margin-top: 6px;
-         margin-left: -3px;
-      }
-   }
-   .stress-hints {
-      display: grid;
-      border-left: 1px black solid;
-      grid-template-columns: repeat(4, 10px);
-      grid-template-rows: repeat(3, 10px);
-      i {
-         margin-top: 6px;
-         margin-right: -3px;
-      }
-   }
+
 </style>
