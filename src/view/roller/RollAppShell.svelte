@@ -10,6 +10,7 @@
    import DiceControl from "./DiceControl.svelte";
    import ParticipantsControl from "./ParticipantsControl.svelte";
    import ResistancePicker from "./ResistancePicker.svelte";
+   import RollControl from "./RollControl.svelte";
    import { constants } from "../../constants";
    import { nullable_tjs_doc } from "../../doc_store";
 
@@ -44,9 +45,6 @@
       dicePool -= $difficulty;
    }
 
-   // Helpers for tracking stuff
-   // Iterator for our roll dice
-   $: rollDice = new Array(dicePool).fill(0);
 </script>
 
 <!-- ApplicationShell provides the popOut / application shell frame, header bar, content areas -->
@@ -110,13 +108,8 @@
          <h2>Danger</h2>
          <DiceControl {dice} {stressBonus} />
       </div>
-      <div class="box the-roll">
-         <h2>Roll</h2>
-         <div class="dice-pool">
-            {#each rollDice as _}
-               <img src="icons/dice/d10black.svg" />
-            {/each}
-         </div>
+      <div class="box the-roll" style="grid-column: 4; grid-row: 2">
+         <RollControl dicePool={dicePool}></RollControl>
       </div>
    </main>
 </ApplicationShell>
@@ -133,32 +126,7 @@
       display: grid;
       grid-template-rows: repeat(3, 1fr);
    }
-   .the-roll {
-      grid-column: 4;
-      grid-row: 2;
 
-      h2 {
-         width: 100%;
-      }
-
-      .dice-pool {
-         display: flex;
-
-         img {
-            width: 64px;
-            border: none;
-            margin-left: -48px;
-            filter: opacity(40%);
-         }
-
-         img:nth-of-type(1) {
-            margin-left: 0px;
-            filter: none;
-         }
-      }
-
-      align-items: center;
-   }
    .choice-hints {
       display: grid;
       grid-template-columns: 14px;
