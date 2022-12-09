@@ -42,7 +42,6 @@ export function nullable_tjs_doc(initial) {
             current_tjs_doc = new TJSDocument(new_val);
             current_doc_subscription = current_tjs_doc.subscribe((sub_val) => {
                 subscriptions.forEach(is => is[1](sub_val));
-                console.log("TJS document called sub func", sub_val);
             });
 
             // Do not call all subscribers - the above subscription will do that
