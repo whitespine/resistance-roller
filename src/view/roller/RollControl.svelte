@@ -17,7 +17,7 @@
             formula = "0";
         }
         let roll = new Roll(formula);
-        await roll.roll({async: true});
+        await roll.roll({ async: true });
         console.log(roll.result);
 
         // Start animation and await its completion
@@ -27,9 +27,9 @@
     let diceRotations = new Array(10).fill(0);
     function spin() {
         return new Promise((succ) => {
-            diceRotations = diceRotations.map(_ => (Math.random() - 0.5) * 3600);
+            diceRotations = diceRotations.map((_) => (Math.random() - 0.5) * 3600);
             setTimeout(() => {
-                diceRotations = diceRotations.map(_ => 0);
+                diceRotations = diceRotations.map((_) => 0);
                 succ();
             }, 200);
         });
@@ -38,7 +38,8 @@
     // Helpers for tracking stuff
     // Iterator for our roll dice
     $: rollDice = new Array(dicePool > 0 ? dicePool : 1).fill(0);
-    $: diceIcon = dicePool > 0 ? "icons/dice/d10black.svg" : dicePool == 0 ? "icons/dice/d8black.svg" : "icons/dice/d6black.svg";
+    $: diceIcon =
+        dicePool > 0 ? "icons/dice/d10black.svg" : dicePool == 0 ? "icons/dice/d8black.svg" : "icons/dice/d6black.svg";
 </script>
 
 <div class="flexcol">
