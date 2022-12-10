@@ -34,6 +34,21 @@
       "path": "lang/en.json"
     }
   ],
+  "relationships": {
+    "systems": [{
+      "id": "heart",
+      "type": "system",
+      "manifest": "https://raw.githubusercontent.com/hitcherland/foundryvtt-heart/0.5.0/system.json",
+      "compatibility": {
+        "verified": "0.5.0"
+      }
+    }],
+    "requires": [{
+      "id": "socketlib",
+      "type": "module",
+      "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json"
+    }]
+  },
   "socket": true,
   "manifest": "https://github.com/typhonjs-fvtt-demo/template-svelte-esm/releases/latest/download/module.json",
   "download": "https://github.com/typhonjs-fvtt-demo/template-svelte-esm/releases/download/0.0.0/module.zip",
