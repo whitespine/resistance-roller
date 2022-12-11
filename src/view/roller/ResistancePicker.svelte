@@ -3,8 +3,8 @@
     import Checktangle from "../components/Checktangle.svelte";
     const resistances = CONFIG[constants.moduleId].resistances;
 
-    /** @type { Actor } */
-    export let playerCharacter;
+    /** @type { Actor | null } */
+    export let playerCharacter = null;
 
     /** @type { string } */
     export let selectedResistance = "mind";
@@ -12,24 +12,28 @@
 
 <div>
     {#each resistances as res}
-        <Checktangle label={res} selected={selectedResistance == res} on:click={() => selectedResistance = res}>
+        <Checktangle label={res} selected={selectedResistance == res} on:click={() => (selectedResistance = res)}>
             <div class="prot-hints" slot="left">
-                {#each new Array(6) as _, i}
-                    {#if i < playerCharacter?.system.resistances[res].protection ?? 0}
-                        <i class="fas fa-2xs fa-shield" />
-                    {:else}
-                        <i class="fa-light fa-2xs fa-shield" />
-                    {/if}
-                {/each}
+                {#if playerCharacter}
+                    {#each new Array(6) as _, i}
+                        {#if i < playerCharacter?.system.resistances[res].protection ?? 0}
+                            <i class="fas fa-2xs fa-shield" />
+                        {:else}
+                            <i class="fa-light fa-2xs fa-shield" />
+                        {/if}
+                    {/each}
+                {/if}
             </div>
             <div class="stress-hints" slot="right">
-                {#each new Array(12) as _, i}
-                    {#if i < playerCharacter?.system.resistances[res].value ?? 0}
-                        <i class="fa-solid fa-2xs fa-square" />
-                    {:else}
-                        <i class="fa-sharp fa-2xs fa-square" />
-                    {/if}
-                {/each}
+                {#if playerCharacter}
+                    {#each new Array(12) as _, i}
+                        {#if i < playerCharacter?.system.resistances[res].value ?? 0}
+                            <i class="fa-solid fa-2xs fa-square" />
+                        {:else}
+                            <i class="fa-sharp fa-2xs fa-square" />
+                        {/if}
+                    {/each}
+                {/if}
             </div>
         </Checktangle>
     {/each}
