@@ -1,6 +1,6 @@
 <script>
     import { constants } from "../../constants";
-    import Checktangle from "../components/Checktangle.svelte";
+    import Checktangle from "./Checktangle.svelte";
     const resistances = CONFIG[constants.moduleId].resistances;
 
     /** @type { Actor | null } */

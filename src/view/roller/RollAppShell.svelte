@@ -18,7 +18,7 @@
     import Adversary from "./Adversary.svelte";
     import DiceControl from "./DiceControl.svelte";
     import ParticipantsControl from "./ParticipantsControl.svelte";
-    import ResistancePicker from "./ResistancePicker.svelte";
+    import ResistancePicker from "../components/ResistancePicker.svelte";
     import RollControl from "./RollControl.svelte";
     import { constants } from "../../constants";
 
