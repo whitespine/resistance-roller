@@ -26,14 +26,14 @@
         // Initialize our participant effects
         /** @type {RollResultEntry[]} */
         let effects = [];
-        for(let p of $participantChoices) { 
+        for (let p of $participantChoices) {
             let participant = fromUuidSync(p);
 
             // Roll fallout / stress
             let stress_roll = new Roll(`1d${$stressDice} + ${$stressBonus}`);
-            await stress_roll.roll({async: true});
+            await stress_roll.roll({ async: true });
             let fallout_roll = new Roll("1d12");
-            await fallout_roll.roll({async: true});
+            await fallout_roll.roll({ async: true });
 
             // Create our effect object
             effects.push({
@@ -44,12 +44,11 @@
                 stress_pre_apply: foundry.utils.duplicate(participant.system.resistances),
 
                 // Temp vals
-                fallout_stress: -1, 
-                fallout_result: "none", 
-                resistance: resistance, 
-            })
+                fallout_stress: -1,
+                fallout_result: "none",
+                resistance: resistance,
+            });
         }
-
 
         // Wait a moment to animate
         await spin();
@@ -58,22 +57,22 @@
         /** @type {RollResultData} */
         let rollData = {
             actor_id: game.user.character?.uuid ?? null,
-            effects, 
+            effects,
             roll: action_roll.result,
-            rolls: action_roll.dice.flatMap(d => d.values),
+            rolls: action_roll.dice.flatMap((d) => d.results).map((r) => r.result),
             domain,
             skill,
-            resistance
+            resistance,
         };
 
         /** @type {RollResultMessageFlags} */
-        let flagData = { rollData };
+        let flagData = { data: { rollData } };
 
         // Create the message
         let msg = await ChatMessage.create({
             user: game.user.id,
             flags: {
-                [constants.moduleId]: flagData
+                [constants.moduleId]: flagData,
             },
         });
 
