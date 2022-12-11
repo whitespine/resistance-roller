@@ -3,7 +3,7 @@
 
 <script>
     import { ApplicationShell } from "@typhonjs-fvtt/runtime/svelte/component/core";
-    import { mastery, selectedDomain, selectedSkill, difficulty, dice, stressBonus } from "../../stores";
+    import { mastery, selectedDomain, selectedSkill, selectedResistance, difficulty, stressDice, stressBonus } from "../../stores";
     import Checktangle from "../components/Checktangle.svelte";
     import Dropdown from "../components/Dropdown.svelte";
     import Adversary from "./Adversary.svelte";
@@ -119,10 +119,10 @@
         </div>
         <div class="box" style="grid-row: 2; grid-column: 2">
             <h2>Danger</h2>
-            <DiceControl {dice} {stressBonus} />
+            <DiceControl bind:stressDice={$stressDice} bind:stressBonus={$stressBonus} />
         </div>
         <div class="box the-roll" style="grid-column: 4; grid-row: 2">
-            <RollControl {dicePool} />
+            <RollControl {dicePool} skill={$selectedSkill} domain={$selectedDomain} resistance={$selectedResistance} />
         </div>
     </main>
 </ApplicationShell>

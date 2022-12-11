@@ -1,7 +1,7 @@
 <script>
     import { constants } from "../../constants";
     import Checktangle from "../components/Checktangle.svelte";
-    import { resistance } from "../../stores";
+    import { selectedResistance } from "../../stores";
     const resistances = CONFIG[constants.moduleId].resistances;
 
     /** @type { Actor } */
@@ -10,7 +10,7 @@
 
 <div>
     {#each resistances as res}
-        <Checktangle label={res} selected={$resistance == res} on:click={() => resistance.set(res)}>
+        <Checktangle label={res} selected={$selectedResistance == res} on:click={() => selectedResistance.set(res)}>
             <div class="prot-hints" slot="left">
                 {#each new Array(6) as _, i}
                     {#if i < playerCharacter?.system.resistances[res].protection ?? 0}

@@ -1,39 +1,39 @@
 <script>
-    export let dice;
+    export let stressDice;
     export let stressBonus;
 
     const incrementDice = () => {
-        if ($dice < 12) {
-            $dice += 2;
+        if (stressDice < 12) {
+            stressDice += 2;
         } else {
-            $stressBonus += 1;
+            stressBonus += 1;
         }
     };
     const decrementDice = () => {
-        if ($stressBonus > 0) {
-            $stressBonus -= 1;
-        } else if ($dice > 4) {
-            $dice -= 2;
+        if (stressBonus > 0) {
+            stressBonus -= 1;
+        } else if (stressDice > 4) {
+            stressDice -= 2;
         }
     };
     let diceIcon;
     $: {
-        if ($dice < 4) {
+        if (stressDice < 4) {
             diceIcon = "icons/svg/degen.svg";
-        } else if ($dice > 12) {
+        } else if (stressDice > 12) {
             diceIcon = "icons/svg/regen.svg";
         } else {
-            diceIcon = `icons/dice/d${$dice}black.svg`;
+            diceIcon = `icons/dice/d${stressDice}black.svg`;
         }
     }
 </script>
 
 <div on:click={incrementDice} on:contextmenu|preventDefault={decrementDice}>
     <img src={diceIcon} />
-    {#if $stressBonus > 0}
-        <span>D{$dice} + {$stressBonus}</span>
+    {#if stressBonus > 0}
+        <span>D{stressDice} + {stressBonus}</span>
     {:else}
-        <span>D{$dice}</span>
+        <span>D{stressDice}</span>
     {/if}
 </div>
 
