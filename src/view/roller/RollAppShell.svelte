@@ -3,7 +3,7 @@
 
 <script>
     import { ApplicationShell } from "@typhonjs-fvtt/runtime/svelte/component/core";
-    import { mastery, selectedDomain, selectedSkill, selectedResistance, difficulty, stressDice, stressBonus } from "../../stores";
+    import { mastery, selectedDomain, selectedSkill, selectedResistance, difficulty, stressDice, stressBonus, nullable_tjs_doc } from "../../stores";
     import Checktangle from "../components/Checktangle.svelte";
     import Dropdown from "../components/Dropdown.svelte";
     import Adversary from "./Adversary.svelte";
@@ -12,14 +12,13 @@
     import ResistancePicker from "./ResistancePicker.svelte";
     import RollControl from "./RollControl.svelte";
     import { constants } from "../../constants";
-    import { nullable_tjs_doc } from "../../doc_store";
 
     export let elementRoot;
 
     const domains = CONFIG[constants.moduleId].domains;
     const skills = CONFIG[constants.moduleId].skills;
 
-    // Get what adversary we should show
+    // Get what adversary we should show 
     export let adversary = null;
     let adverstorey = nullable_tjs_doc(adversary);
 

@@ -1,4 +1,4 @@
-import { constants } from "./constants";
+import { constants } from "../constants";
 import { writable } from "svelte/store";
 
 const MODE_REQUEST_VALUE = "req"; // data will be the requesters current time. Only respond if you have a newer one

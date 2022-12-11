@@ -1,5 +1,5 @@
 import RollApp from './view/roller/RollApp.js';
-import { listenSockets } from "./socket_store";
+import { listenSockets } from "./stores";
 import MenuApp from './view/MenuApp.js';
 import { constants } from './constants.js';
 import './chatmessage.js';
