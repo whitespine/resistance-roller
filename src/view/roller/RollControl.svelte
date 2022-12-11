@@ -26,9 +26,11 @@
         // Initialize our participant effects
         /** @type {RollResultEntry[]} */
         let effects = [];
-        for (let p of $participantChoices) {
-            let participant = fromUuidSync(p);
-
+        let participants = $participantChoices.map(fromUuidSync).filter(x => x);
+        if (game.user.character) {
+            participants = [game.user.character, ...participants];
+        }
+        for (let participant of participants) {
             // Roll fallout / stress
             let stress_roll = new Roll(`1d${$stressDice} + ${$stressBonus}`);
             await stress_roll.roll({ async: true });
@@ -37,9 +39,9 @@
 
             // Create our effect object
             effects.push({
-                actor_id: p.uuid,
-                fallout_roll: fallout_roll.result,
-                stress_roll: stress_roll.result,
+                actor_id: participant.uuid,
+                fallout_roll: fallout_roll.total,
+                stress_roll: stress_roll.total,
                 status: "pending",
                 stress_pre_apply: foundry.utils.duplicate(participant.system.resistances),
 

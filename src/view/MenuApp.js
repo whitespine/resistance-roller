@@ -1,11 +1,13 @@
 import {
    SvelteApplication,
-   TJSDialog }                   from '@typhonjs-fvtt/runtime/svelte/application';
+   TJSDialog
+} from '@typhonjs-fvtt/runtime/svelte/application';
 
-import MenuAppShell              from './MenuAppShell.svelte';
+import MenuAppShell from './MenuAppShell.svelte';
 
-import ClientSettingsApp  from './settings/ClientSettingsApp';
+import ClientSettingsApp from './settings/ClientSettingsApp';
 import RollApp from './roller/RollApp';
+import StressConfirmApp from './stresstaker/StressConfirmApp';
 /*
 import AppStateSessionApp        from './app-state/session-storage/AppStateSessionApp.js';
 import ChatDialogContent         from './chatmessage/ChatDialogContent.svelte';
@@ -23,8 +25,7 @@ import TinyMCEApp                from './editor/tinymce/TinyMCEApp.js';
 */
 
 
-export default class MenuApp extends SvelteApplication
-{
+export default class MenuApp extends SvelteApplication {
    /**
     * @inheritDoc
     */
@@ -36,11 +37,14 @@ export default class MenuApp extends SvelteApplication
     * @returns {object} options - Application options.
     * @see https://foundryvtt.com/api/Application.html#options
     */
-   static get defaultOptions()
-   {
+   static get defaultOptions() {
       /** @type {{}[]} */
       const buttons = [
          { title: 'Roller', onclick: () => RollApp.for(null) },
+         {
+            title: 'Stress Confirm',
+            onclick: () => StressConfirmApp.for(game.messages.contents[game.messages.size - 1], game.actors.getName("GMPC"))
+         },
          { title: 'Settings', class: ClientSettingsApp },
          // { title: 'Hello Foundry', class: HelloFoundryApplication },
          // { title: 'Hello Foundry', class: HelloFoundryApplication },
@@ -48,10 +52,10 @@ export default class MenuApp extends SvelteApplication
          // { title: 'Reactive Document (Basic)', class: BasicDocumentApp },
          // { title: 'Reactive Embedded Collections', class: EmbeddedDocApplication },
          // { title: 'Chat Message', onclick: () => new TJSDialog(
-             // {
-                // title: 'Essential Svelte (ESM) - Chat Message',
-                // content: ChatDialogContent
-             // }, { id: 'essential-esm-chat-dialog' })
+         // {
+         // title: 'Essential Svelte (ESM) - Chat Message',
+         // content: ChatDialogContent
+         // }, { id: 'essential-esm-chat-dialog' })
          // },
          // { title: 'Position (Basic Overlay)', class: PositionBasicOverlayApp },
          // { title: 'Position (App)', class: PositionApplication },

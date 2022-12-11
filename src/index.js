@@ -57,9 +57,9 @@ Hooks.once('init', async function () {
 
         resistances_map: {
             "blood": "Blood",
+            "mind": "Mind",
             "echo": "Echo",
             "fortune": "Fortune",
-            "mind": "Mind",
             "supplies": "Supplies"
         }
     };
