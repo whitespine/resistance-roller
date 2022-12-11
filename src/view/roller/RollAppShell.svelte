@@ -67,7 +67,7 @@
         </div>
         <div class="box" style="grid-column: 3; grid-row: 2">
             <h2>Resistance</h2>
-            <ResistancePicker playerCharacter={$playerCharactore} />
+            <ResistancePicker playerCharacter={$playerCharactore} bind:selectedResistance={$selectedResistance}/>
         </div>
         <div class="box skilldom" style="grid-column: 2; grid-row: 1;">
             <div>
