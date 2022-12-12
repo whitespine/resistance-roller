@@ -30,10 +30,10 @@ async function fulfillSummonAllDialogs(messageId) {
     // For each effect, check participant and possibly summon dialog
     for (let eff of flagData.rollData.effects) {
         /** @type {Actor} */
-        let participant = await fromUuid(eff.actor_id);
+        let participant = await fromUuid(eff.actorID);
         if (participant && participant.isOwner && !game.user.isGM && eff.status != "resolved") {
             // Awaken my masters
-            StressConfirmApp.for(message, participant);
+            StressConfirmApp.for(message, participant).render(true, { focus: true });
         }
     }
 }
@@ -77,7 +77,7 @@ async function fulfillEditRollMessage(messageId, participantId, newEffectData) {
     }
 
     // Find/Confirm that we're in the effects
-    let corrEffectIndex = flagData.rollData.effects.findIndex(e => e.actor_id == participantId);
+    let corrEffectIndex = flagData.rollData.effects.findIndex(e => e.actorID == participantId);
 
     if(corrEffectIndex < 0) {
         console.error("Proposed participant was not found in flags - aborting");

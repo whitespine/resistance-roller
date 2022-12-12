@@ -21,31 +21,33 @@
     /** @type {Actor} */
     export let participant;
 
-    // Derived values
+    // One-time message derived values - we don't make these reactive
     // Get the flags
     /** @type {RollResultMessageFlags} */
-    $: flagData = message.getFlag(constants.moduleId, 'data');
-    $: rollData = flagData.rollData;
-    $: participantEntry = rollData.effects.find(e => e.actor_id == participant.uuid);
+    const flagData = message.getFlag(constants.moduleId, 'data');
+    const rollData = flagData.rollData;
+    const participantEntry = rollData.effects.find(e => e.actorID == participant.uuid);
+
+    // Modifiable values
+    let stress = participantEntry.stressRoll;
+    let resistance = participantEntry.resistance;
+
     $: resistTrack = participant.system.resistances[resistance];
     $: currentStress = resistTrack.value;
     $: protection = resistTrack.protection;
-    $: incomingStress = stress - protection;
-
-    // Modifiable values
-    let stress = participantEntry.stress_roll;
-    let resistance = participantEntry.resistance;
+    $: incomingStress = Math.max(stress - protection, 0);
 
     // Callbacks
     const application = getContext('external').application;
     async function confirm() {
-        let falloutResult;
+        let falloutResult = "none";
+        let falloutTotalStress = 0;
         if (incomingStress > 0) {
             // If incoming stress > 0, need to apply then move into the fallout flow
             await participant.update({
                 [`system.resistances.${resistance}.value`]: currentStress + incomingStress,
             });
-            let totalStress = Object.values(participant.system.resistances).reduce((acc, res) => acc + res.value, 0);
+            falloutTotalStress = Object.values(participant.system.resistances).reduce((acc, res) => acc + res.value, 0);
             console.log("Total stress:", totalStress);
 
             // Fallout has already been rolled - check if fallout has occurred
