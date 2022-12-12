@@ -31,7 +31,7 @@ async function fulfillSummonAllDialogs(messageId) {
     for (let eff of flagData.rollData.effects) {
         /** @type {Actor} */
         let participant = await fromUuid(eff.actor_id);
-        if (participant && participant.isOwner && !game.user.isGM) {
+        if (participant && participant.isOwner && !game.user.isGM && eff.status != "resolved") {
             // Awaken my masters
             StressConfirmApp.for(message, participant);
         }
