@@ -24,7 +24,7 @@
             <Checktangle
                 label={pc.name.substr(0, 12)}
                 selected={true}
-                on:click={presenceToggler(participantChoices, pc.id)}
+                on:click={presenceToggler(participantChoices, pc.uuid)}
             >
                 <div class="self-indicator" slot="right">
                     ME
@@ -33,8 +33,8 @@
         {:else}
             <Checktangle
                 label={pc.name}
-                selected={$participantChoices.includes(pc.id)}
-                on:click={presenceToggler(participantChoices, pc.id)}
+                selected={$participantChoices.includes(pc.uuid)}
+                on:click={presenceToggler(participantChoices, pc.uuid)}
             />
         {/if}
     {/each}
