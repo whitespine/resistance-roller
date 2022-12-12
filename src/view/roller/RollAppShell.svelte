@@ -27,12 +27,13 @@
     const domains = CONFIG[constants.moduleId].domains;
     const skills = CONFIG[constants.moduleId].skills;
 
-    // Get what player controls us and what adversary we should show
+    // Get what player controls us and what adversary we should show. Both should be stores
     /** @type {import("svelte/store").Writable<Actor>} */
     export let adversary;
 
     /** @type {import("svelte/store").Writable<Actor>} */
-    let playerCharacter;
+    export let playerCharacter;
+
 
     // Reactive props
     let adversarySkills;

@@ -36,7 +36,7 @@ export default class RollApp extends SvelteApplication {
       return new RollApp({
          svelte: {
             props: {
-               playerCharacter: nullable_tjs_doc(game.user.player_character),
+               playerCharacter: nullable_tjs_doc(game.user.character),
                adversary: nullable_tjs_doc(actor)
             }
          }
