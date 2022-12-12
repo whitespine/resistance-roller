@@ -27,27 +27,27 @@
     const domains = CONFIG[constants.moduleId].domains;
     const skills = CONFIG[constants.moduleId].skills;
 
-    // Get what adversary we should show
-    export let adversary = null;
-    let adverstorey = nullable_tjs_doc(adversary);
+    // Get what player controls us and what adversary we should show
+    /** @type {import("svelte/store").Writable<Actor>} */
+    export let adversary;
 
-    // Don't bother handling player character changing mid-interaction. Grab pc
-    let playerCharactore = nullable_tjs_doc(game.user.character);
+    /** @type {import("svelte/store").Writable<Actor>} */
+    let playerCharacter;
 
     // Reactive props
-    let adversarySkills = [];
-    let adversaryDomains = [];
-    let playerSkills = [];
-    let playerDomains = [];
+    let adversarySkills;
+    let adversaryDomains;
+    let playerSkills;
+    let playerDomains;
     let dicePool = 1;
     $: {
-        adversarySkills = $adverstorey?.flags[constants.moduleId]?.skills ?? [];
-        adversaryDomains = $adverstorey?.flags[constants.moduleId]?.domains ?? [];
+        adversarySkills = $adversary?.flags[constants.moduleId]?.skills ?? [];
+        adversaryDomains = $adversary?.flags[constants.moduleId]?.domains ?? [];
         playerSkills = Object.fromEntries(
-            Object.entries($playerCharactore?.system.skills ?? {}).map((kv) => [kv[0], kv[1].value])
+            Object.entries($playerCharacter?.system.skills ?? {}).map((kv) => [kv[0], kv[1].value])
         );
         playerDomains = Object.fromEntries(
-            Object.entries($playerCharactore?.system.domains ?? {}).map((kv) => [kv[0], kv[1].value])
+            Object.entries($playerCharacter?.system.domains ?? {}).map((kv) => [kv[0], kv[1].value])
         );
 
         dicePool = 1;
@@ -62,7 +62,7 @@
 <!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
     <main class="resist-roller">
-        <Adversary class="box adversary" actor={$adverstorey} on:select-actor={(x) => ($adverstorey = x.detail)} />
+        <Adversary class="box adversary" actor={$adversary} on:select-actor={(x) => ($adversary = x.detail)} />
         <div class="box" style="grid-column: 3; grid-row: 1">
             <h2>Participants</h2>
             <ParticipantsControl />
@@ -75,7 +75,7 @@
         </div>
         <div class="box" style="grid-column: 3; grid-row: 2">
             <h2>Resistance</h2>
-            <ResistancePicker playerCharacter={$playerCharactore} bind:selectedResistance={$selectedResistance} />
+            <ResistancePicker playerCharacter={$playerCharacter} bind:selectedResistance={$selectedResistance} />
         </div>
         <div class="box skilldom" style="grid-column: 2; grid-row: 1;">
             <div>
@@ -130,7 +130,7 @@
             <DiceControl bind:stressDice={$stressDice} bind:stressBonus={$stressBonus} />
         </div>
         <div class="box the-roll" style="grid-column: 4; grid-row: 2">
-            <RollControl {dicePool} skill={$selectedSkill} domain={$selectedDomain} resistance={$selectedResistance} />
+            <RollControl {dicePool} skill={$selectedSkill} domain={$selectedDomain} resistance={$selectedResistance} adversary={$adversary} />
         </div>
     </main>
 </ApplicationShell>

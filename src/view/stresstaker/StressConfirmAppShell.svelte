@@ -63,7 +63,7 @@
         <div class="flexcol">
             <h2>Stress Incurred</h2>
             <ResistancePicker bind:selectedResistance={resistance} playerCharacter={participant} />
-            <button class="confirm">Take {incomingStress} {stress} {resistance} stress</button>
+            <button class="confirm">Take {incomingStress} stress</button>
             <button class="ignore">Ignore Hit</button>
         </div>
     </main>

@@ -1,12 +1,18 @@
 <script>
     import { constants } from "../../constants";
+    import { summonAllDialogs } from "../../socketlib";
     import { participantChoices, stressBonus, stressDice } from "../../stores";
 
     /** @type { number } */
     export let dicePool;
+    /** @type { string } */
     export let domain;
+    /** @type { string } */
     export let skill;
+    /** @type { string } */
     export let resistance;
+    /** @type { Actor } */
+    export let adversary;
 
     async function doRoll() {
         // Decide our formula. Vary from the book - don't "drop" highest, that's factored into dice pool. Negative rolls still possible, just increasinly unlikely
@@ -42,7 +48,7 @@
                 actor_id: participant.uuid,
                 fallout_roll: fallout_roll.total,
                 stress_roll: stress_roll.total,
-                status: "pending",
+                status: "unresolved",
                 stress_pre_apply: foundry.utils.duplicate(participant.system.resistances),
 
                 // Temp vals
@@ -59,6 +65,7 @@
         /** @type {RollResultData} */
         let rollData = {
             actor_id: game.user.character?.uuid ?? null,
+            foe_id: adversary,
             effects,
             roll: action_roll.result,
             rolls: action_roll.dice.flatMap((d) => d.results).map((r) => r.result),
@@ -78,8 +85,8 @@
             },
         });
 
-        // Send command to show a confirm dialogue to all participants
-        console.log("TODO");
+        // Send command to show a completion dialogue to all participants. Should hit us too
+        summonAllDialogs(msg);
     }
 
     // Fun little thing for dice animation

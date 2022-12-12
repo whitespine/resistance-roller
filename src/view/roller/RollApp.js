@@ -1,4 +1,5 @@
 import { SvelteApplication } from '@typhonjs-fvtt/runtime/svelte/application';
+import { nullable_tjs_doc } from '../../stores';
 
 import RollAppShell from './RollAppShell.svelte';
 
@@ -26,11 +27,17 @@ export default class RollApp extends SvelteApplication {
       });
    }
 
+   /** Summon a roll prompt against the provided actor
+    * 
+    * @param {Actor | null} actor Actor to track
+    * @returns 
+    */
    static for(actor) {
       return new RollApp({
          svelte: {
             props: {
-               adversary: actor
+               playerCharacter: nullable_tjs_doc(game.user.player_character),
+               adversary: nullable_tjs_doc(actor)
             }
          }
       });

@@ -3,6 +3,7 @@ import { listenSockets } from "./stores";
 import MenuApp from './view/MenuApp.js';
 import { constants } from './constants.js';
 import './chatmessage.js';
+import './socketlib';
 
 import "../styles/headless.scss";
 
