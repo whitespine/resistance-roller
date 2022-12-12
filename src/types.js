@@ -4,7 +4,7 @@
  * The sub-item of of RollResultMessageFlags encapsulating the effects on a single participant
  *
  * @property {string | null} actor_id - The actor uuid of this participant
- * @property {string} status - One of "pending" | "applied" | "ignored"
+ * @property {string} status - One of "unresolved" | "resolved"
  * @property {number} stress_roll - The amount of stress rolled
  * @property {number} fallout_roll - The fallout roll
  * @property {number} fallout_stress - The fallout roll
