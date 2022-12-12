@@ -26,8 +26,8 @@
         } else {
             formula = "0";
         }
-        let action_roll = new Roll(formula);
-        await action_roll.roll({ async: true });
+        let actionRoll = new Roll(formula);
+        await actionRoll.roll({ async: true });
 
         // Initialize our participant effects
         /** @type {RollResultEntry[]} */
@@ -45,15 +45,15 @@
 
             // Create our effect object
             effects.push({
-                actor_id: participant.uuid,
-                fallout_roll: fallout_roll.total,
-                stress_roll: stress_roll.total,
+                actorID: participant.uuid,
+                falloutRoll: fallout_roll.total,
+                stressRoll: stress_roll.total,
                 status: "unresolved",
-                stress_pre_apply: foundry.utils.duplicate(participant.system.resistances),
+                stressPreApply: foundry.utils.duplicate(participant.system.resistances),
 
                 // Temp vals
-                fallout_stress: -1,
-                fallout_result: "none",
+                falloutTotalStress: -1,
+                falloutResult: "none",
                 resistance: resistance,
             });
         }
@@ -64,11 +64,11 @@
         // Build our message template
         /** @type {RollResultData} */
         let rollData = {
-            actor_id: game.user.character?.uuid ?? null,
-            foe_id: adversary,
+            actorID: game.user.character?.uuid ?? null,
+            foeID: adversary,
             effects,
-            roll: action_roll.result,
-            rolls: action_roll.dice.flatMap((d) => d.results).map((r) => r.result),
+            roll: actionRoll.result,
+            rolls: actionRoll.dice.flatMap((d) => d.results).map((r) => r.result),
             domain,
             skill,
             resistance,

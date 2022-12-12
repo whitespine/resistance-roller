@@ -31,14 +31,10 @@ export default class StressConfirmApp extends SvelteApplication {
     * @returns 
     */
    static for(message, participant) {
-      // Get the flags
-      /** @type {RollResultMessageFlags} */
-      const flagData = message.getFlag(constants.moduleId, 'data');
-
       return new StressConfirmApp({
          svelte: {
             props: {
-               rollData: flagData.rollData,
+               message,
                participant
             }
          }

@@ -11,7 +11,7 @@
          </div>
       {/if}
 
-      {label}
+      <span>{label}</span>
 
       {#if $$slots.right}
          <div style="float: right">

@@ -3,7 +3,7 @@
     /** @type {RollResultMessageFlags} */
     export let rollData = null;
     /** @type {Actor | null} */
-    $: leader = fromUuidSync(rollData.actor_id);
+    $: leader = (rollData.actorID ? fromUuidSync(rollData.actorID) : null);
 </script>
 
 <div class="flexcol">

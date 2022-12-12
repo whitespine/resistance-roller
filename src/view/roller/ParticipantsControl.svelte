@@ -9,20 +9,34 @@
     const all_actors = new TJSDocumentCollection(game.actors);
     let activeCharacters;
     let activeUsers;
+    let playerCharacter;
     $: {
         $all_actors; // Want to watch for mutations on all actors
         activeUsers = $users.filter((u) => u.active);
         activeCharacters = activeUsers.map((u) => u.character).filter((c) => c);
+        playerCharacter = game.user.character;
     }
 </script>
 
 <div>
     {#each activeCharacters as pc}
-        <Checktangle
-            label={pc.name}
-            selected={$participantChoices.includes(pc.id)}
-            on:click={presenceToggler(participantChoices, pc.id)}
-        />
+        {#if pc == playerCharacter}
+            <Checktangle
+                label={pc.name.substr(0, 12)}
+                selected={true}
+                on:click={presenceToggler(participantChoices, pc.id)}
+            >
+                <div class="self-indicator" slot="right">
+                    ME
+                </div>
+            </Checktangle>
+        {:else}
+            <Checktangle
+                label={pc.name}
+                selected={$participantChoices.includes(pc.id)}
+                on:click={presenceToggler(participantChoices, pc.id)}
+            />
+        {/if}
     {/each}
 </div>
 
@@ -30,5 +44,10 @@
     div {
         display: flex;
         flex-direction: column;
+    }
+
+    .self-indicator {
+        border-left: 1px black solid;
+        padding-left: 5px;
     }
 </style>
