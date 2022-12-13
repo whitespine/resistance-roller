@@ -48,12 +48,11 @@
                 [`system.resistances.${resistance}.value`]: currentStress + incomingStress,
             });
             falloutTotalStress = Object.values(participant.system.resistances).reduce((acc, res) => acc + res.value, 0);
-            console.log("Total stress:", totalStress);
 
             // Fallout has already been rolled - check if fallout has occurred
-            if(participantEntry.fallout_roll < totalStress) {
+            if(participantEntry.falloutRoll > falloutTotalStress) {
                 falloutResult = "none";
-            } else if (participantEntry.fallout_roll <= 6) {
+            } else if (participantEntry.falloutRoll <= 6) {
                 falloutResult = "minor";
                 // Clear track
                 await participant.update({

@@ -23,7 +23,7 @@
         {#if pc == playerCharacter}
             <Checktangle
                 label={pc.name.substr(0, 12)}
-                selected={true}
+                selected={$participantChoices.includes(pc.uuid)}
                 on:click={presenceToggler(participantChoices, pc.uuid)}
             >
                 <div class="self-indicator" slot="right">
@@ -49,5 +49,8 @@
     .self-indicator {
         border-left: 1px black solid;
         padding-left: 5px;
+        padding-right: 5px;
+        background-color: var(--main-dark-red);
+        color: white;
     }
 </style>

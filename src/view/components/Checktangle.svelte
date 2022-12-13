@@ -26,14 +26,14 @@
       // font-family: "MelmaCracked";
       border: 0;
 
-      background-color: #834040;
+      background-color: var(--main-light-red);
       color: #b0b0b0;
 
       margin: 2px;
    }
 
    button.selected {
-      background-color: #630000;
+      background-color: var(--main-dark-red);
       color: #f0f0f0;
    }
 </style>

@@ -38,16 +38,16 @@
         }
         for (let participant of participants) {
             // Roll fallout / stress
-            let stress_roll = new Roll(`1d${$stressDice} + ${$stressBonus}`);
-            await stress_roll.roll({ async: true });
-            let fallout_roll = new Roll("1d12");
-            await fallout_roll.roll({ async: true });
+            let stressRoll = new Roll(`1d${$stressDice} + ${$stressBonus}`);
+            await stressRoll.roll({ async: true });
+            let falloutRoll = new Roll("1d12");
+            await falloutRoll.roll({ async: true });
 
             // Create our effect object
             effects.push({
                 actorID: participant.uuid,
-                falloutRoll: fallout_roll.total,
-                stressRoll: stress_roll.total,
+                falloutRoll: falloutRoll.total,
+                stressRoll: stressRoll.total,
                 status: "unresolved",
                 stressPreApply: foundry.utils.duplicate(participant.system.resistances),
 

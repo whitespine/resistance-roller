@@ -24,7 +24,6 @@ export function listenSockets() {
         // Unpack message
         let { store, mode, time, data } = message;
         let ss;
-        console.log("RECEIVING SOCKET", store, mode, data, time);
         if (store) {
             ss = SOCKET_STORES[store];
             if (!ss) {
