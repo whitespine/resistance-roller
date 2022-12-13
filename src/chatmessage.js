@@ -59,7 +59,10 @@ Hooks.on('renderChatMessage', (message, html) =>
    if (typeof flagData === 'object')
    {
       // Add the svelte component to the message instance loaded in client side memory.
-      message._svelteComponent = new ResistanceChatMessage({ target: html[0], props: flagData });
+      message._svelteComponent = new ResistanceChatMessage({ 
+         target: html[0], 
+         props: foundry.utils.mergeObject({message}, flagData)
+      });
    }
 });
 

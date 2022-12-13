@@ -13,13 +13,14 @@ Hooks.once("socketlib.ready", () => {
  *  if this user is an owner of that actor & this user is not a GM
  * 
  * @param {ChatMessage} message Message to summon messages for
+ * @param {boolean} force Summon even if GM
  */
-export function summonAllDialogs(message) {
-    socket.executeForEveryone("summon-all-dialogs", message.uuid);
+export function summonAllDialogs(message, force = false) {
+    socket.executeForEveryone("summon-all-dialogs", message.uuid, force);
 }
 
 /** Fulfills summonAllDialogs' contract */
-async function fulfillSummonAllDialogs(messageId) {
+async function fulfillSummonAllDialogs(messageId, force) {
     // Get the message
     let message = await fromUuid(messageId);
 
@@ -31,7 +32,7 @@ async function fulfillSummonAllDialogs(messageId) {
     for (let eff of flagData.rollData.effects) {
         /** @type {Actor} */
         let participant = await fromUuid(eff.actorID);
-        if (participant && participant.isOwner && !game.user.isGM && eff.status != "resolved") {
+        if (participant && participant.isOwner && (!game.user.isGM || force) && eff.status != "resolved") {
             // Awaken my masters
             StressConfirmApp.for(message, participant).render(true, { focus: true });
         }

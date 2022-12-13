@@ -11,9 +11,6 @@
 
     export let elementRoot;
 
-    const domains = CONFIG[constants.moduleId].domains;
-    const skills = CONFIG[constants.moduleId].skills;
-
     // Props
     /** @type {ChatMessage} */
     export let message;
@@ -90,7 +87,7 @@
 <ApplicationShell bind:elementRoot>
     <main class="resist-roller">
         <div class="flexcol">
-            <h2>Stress Incurred</h2>
+            <h2>{participant.name} Stress</h2>
             <ResistancePicker bind:selectedResistance={resistance} playerCharacter={participant} />
             <button on:click={confirm} class="confirm">Take {incomingStress} stress</button>
             <button on:click={ignore} class="ignore">Ignore Hit</button>
