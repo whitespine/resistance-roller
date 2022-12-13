@@ -14,7 +14,7 @@ export default class RollApp extends SvelteApplication {
       return foundry.utils.mergeObject(super.defaultOptions, {
          title: 'Resist.title',  // Automatically localized from `lang/en.json`.
          width: 900,
-         height: 600,
+         height: 550,
          resizable: true,
 
          svelte: {

@@ -46,8 +46,8 @@
             // Create our effect object
             effects.push({
                 actorID: participant.uuid,
-                falloutRoll: falloutRoll.total,
-                stressRoll: stressRoll.total,
+                falloutRollJSON: falloutRoll.toJSON(),
+                stressRollJSON: stressRoll.toJSON(),
                 status: "unresolved",
                 stressPreApply: foundry.utils.duplicate(participant.system.resistances),
 
@@ -67,8 +67,7 @@
             actorID: game.user.character?.uuid ?? null,
             foeID: adversary,
             effects,
-            roll: actionRoll.result,
-            rolls: actionRoll.dice.flatMap((d) => d.results).map((r) => r.result),
+            rollJSON: actionRoll.toJSON(),
             domain,
             skill,
             resistance,

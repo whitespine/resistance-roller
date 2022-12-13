@@ -26,7 +26,7 @@
     const participantEntry = rollData.effects.find(e => e.actorID == participant.uuid);
 
     // Modifiable values
-    let stress = participantEntry.stressRoll;
+    let stress = Roll.fromData(participantEntry.stressRollJSON).total;
     let resistance = participantEntry.resistance;
 
     $: resistTrack = participant.system.resistances[resistance];
