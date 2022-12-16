@@ -1,6 +1,9 @@
 {
   "Resist": {
     "title": "Resistance Roller",
-    "menu": "Menu"
+    "menu": "Menu",
+    "editor": {
+      "title": "Resistance Edtior"
+    }
   }
 }

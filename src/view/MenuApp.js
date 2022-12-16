@@ -4,10 +4,8 @@ import {
 } from '@typhonjs-fvtt/runtime/svelte/application';
 
 import MenuAppShell from './MenuAppShell.svelte';
-
-import ClientSettingsApp from './settings/ClientSettingsApp';
 import RollApp from './roller/RollApp';
-import StressConfirmApp from './stresstaker/StressConfirmApp';
+import { constants } from '../constants';
 /*
 import AppStateSessionApp        from './app-state/session-storage/AppStateSessionApp.js';
 import ChatDialogContent         from './chatmessage/ChatDialogContent.svelte';
@@ -40,12 +38,18 @@ export default class MenuApp extends SvelteApplication {
    static get defaultOptions() {
       /** @type {{}[]} */
       const buttons = [
-         { title: 'Roller', onclick: () => RollApp.for(null) },
          {
-            title: 'Stress Confirm',
-            onclick: () => StressConfirmApp.for(game.messages.contents[game.messages.size - 1], game.actors.getName("GMPC"))
+            title: 'Roller',
+            onclick: () => {
+               let target = game.actors.find(a => a.getFlag(constants.moduleId, "tracked"));
+               return RollApp.for(target ?? null);
+            }
          },
-         { title: 'Settings', class: ClientSettingsApp },
+         // {
+         // title: 'Stress Confirm',
+         // onclick: () => StressConfirmApp.for(game.messages.contents[game.messages.size - 1], game.actors.getName("GMPC"))
+         // },
+         // { title: 'Settings', class: ClientSettingsApp },
          // { title: 'Hello Foundry', class: HelloFoundryApplication },
          // { title: 'Hello Foundry', class: HelloFoundryApplication },
          // { title: 'Header Buttons', class: HeaderButtonsApplication },
