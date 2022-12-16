@@ -52,6 +52,7 @@
                 stressPreApply: foundry.utils.duplicate(participant.system.resistances),
 
                 // Temp vals
+                stressTaken: -1,
                 falloutTotalStress: -1,
                 falloutResult: "none",
                 resistance: resistance,

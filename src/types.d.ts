@@ -2,7 +2,8 @@
 declare type RollResultEntry = {
  actorID: string, // The actor uuid of this participant
  status: string, // One of "unresolved" | "resolved"
- stressRoll: object, // The amount of stress rolled
+ stressRollJSON: object, // The amount of stress rolled
+ stressTaken: number, // The amount of stress taken (minus protection / including other miscellaneous effects)
  falloutRollJSON: object, // The fallout roll
  falloutTotalStress: number, // The total stress at time of fallout roll
  resistance: string, // The resistance the roll was taken against

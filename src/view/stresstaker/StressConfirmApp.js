@@ -14,7 +14,7 @@ export default class StressConfirmApp extends SvelteApplication {
       return foundry.utils.mergeObject(super.defaultOptions, {
          title: 'Resist.title',  // Automatically localized from `lang/en.json`.
          width: 250,
-         height: 400,
+         height: 380,
          resizable: false,
 
          svelte: {

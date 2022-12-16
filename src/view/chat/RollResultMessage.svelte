@@ -33,7 +33,7 @@
             {
                 actor: fromUuidSync(e.actorID),
                 stressRoll: Roll.fromData(e.stressRollJSON),
-                falloutRoll: Roll.fromData(e.falloutRollJSON)
+                falloutRoll: Roll.fromData(e.falloutRollJSON),
             },
             e
         )
@@ -69,18 +69,19 @@
         <span style="grid-area: amt">{resultString}</span>
     </div>
     {#each hydratedEffects as eff}
-        {#key eff.status}
-            <div transition:fade class="result">
-                <img src={eff.actor?.img} title={eff.actor.name} style="grid-area: por" />
-                {#if eff.status == "resolved"}
-                    <span style="grid-area: strrol">{eff.stressRoll.total} {eff.resistance.toUpperCase()}</span>
-                    <span style="grid-area: strtot">{eff.falloutTotalStress} TOTAL</span>
-                    <span style="grid-area: fal">{eff.falloutRoll.total} vs {eff.falloutTotalStress}: {eff.falloutResult.toUpperCase()} FALLOUT</span>
-                {:else}
-                    <span style="grid-row: 1 / 3; grid-column: 2 / 4">UNRESOLVED</span>
-                {/if}
+        {#if eff.status == "unresolved" || eff.stressTaken == 0}
+            <div transition:fade class="result no-stress">
+                <img src={eff.actor?.img} title={eff.actor.name} />
+                <span>{eff.status == "unresolved" ? "UNRESOLVED" : "NO STRESS TAKEN"}</span>
             </div>
-        {/key}
+        {:else}
+            <div transition:fade class="result stress">
+                <img src={eff.actor?.img} title={eff.actor.name} />
+                <span style="grid-area: strrol">{eff.stressTaken} {eff.resistance.toUpperCase()}</span>
+                <span style="grid-area: strtot">{eff.falloutTotalStress} TOTAL</span>
+                <span style="grid-area: fal"> {eff.falloutRoll.total} vs {eff.falloutTotalStress}: {eff.falloutResult.toUpperCase()} FALLOUT</span>
+            </div>
+        {/if}
     {/each}
 </div>
 
@@ -96,11 +97,20 @@
     }
     .result {
         display: grid;
-        grid-template-rows: 1fr 1fr;
-        grid-template-columns: 48px 1fr 1fr;
-        grid-template-areas:
-            "por strrol strtot"
-            "por fal    fal";
+
+        &.no-stress {
+            grid-template-rows: 1fr;
+            grid-template-columns: 48px 1fr;
+        }
+
+        &.stress {
+            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 48px 1fr 1fr;
+            grid-template-areas:
+                "por strrol strtot"
+                "por fal    fal";
+        }
+
         background-color: var(--main-off-white);
         border-radius: 3px;
         margin: 3px 2px;

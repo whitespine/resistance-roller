@@ -21,21 +21,26 @@
     // One-time message derived values - we don't make these reactive
     // Get the flags
     /** @type {RollResultMessageFlags} */
-    const flagData = message.getFlag(constants.moduleId, 'data');
+    const flagData = message.getFlag(constants.moduleId, "data");
     const rollData = flagData.rollData;
-    const participantEntry = rollData.effects.find(e => e.actorID == participant.uuid);
+    const participantEntry = rollData.effects.find((e) => e.actorID == participant.uuid);
+    const incomingStress = Roll.fromData(participantEntry.stressRollJSON).total;
 
     // Modifiable values
-    let stress = Roll.fromData(participantEntry.stressRollJSON).total;
+    let stressTaken = incomingStress;
     let resistance = participantEntry.resistance;
 
     $: resistTrack = participant.system.resistances[resistance];
     $: currentStress = resistTrack.value;
     $: protection = resistTrack.protection;
-    $: incomingStress = Math.max(stress - protection, 0);
+
+    // When resistance is changed, set stressTaken to default
+    $: {
+        stressTaken = Math.max(incomingStress - protection, 0);
+    }
 
     // Callbacks
-    const application = getContext('external').application;
+    const application = getContext("external").application;
     async function confirm() {
         let falloutResult = "none";
         let falloutTotalStress = 0;
@@ -47,18 +52,21 @@
             falloutTotalStress = Object.values(participant.system.resistances).reduce((acc, res) => acc + res.value, 0);
 
             // Fallout has already been rolled - check if fallout has occurred
-            if(participantEntry.falloutRoll > falloutTotalStress) {
+            if (participantEntry.falloutRoll > falloutTotalStress) {
                 falloutResult = "none";
             } else if (participantEntry.falloutRoll <= 6) {
                 falloutResult = "minor";
                 // Clear track
                 await participant.update({
-                    [`system.resistances.${resistance}.value`]: 0
+                    [`system.resistances.${resistance}.value`]: 0,
                 });
             } else {
                 falloutResult = "major";
                 // Clear all
-                let changeEntries = CONFIG[constants.moduleId].resistances.map(r => [`system.resistances.${r}.value`, 0])
+                let changeEntries = CONFIG[constants.moduleId].resistances.map((r) => [
+                    `system.resistances.${r}.value`,
+                    0,
+                ]);
                 await participant.update(Object.fromEntries(changeEntries));
             }
         }
@@ -69,8 +77,9 @@
             status: "resolved",
             falloutTotalStress,
             resistance,
-            falloutResult
-        })
+            falloutResult,
+            stressTaken,
+        });
 
         // Close it
         application.close();
@@ -88,12 +97,28 @@
     <main class="resist-roller">
         <div class="flexcol">
             <h2>{participant.name} Stress</h2>
+            <span> {incomingStress} stress inflicted </span>
             <ResistancePicker bind:selectedResistance={resistance} playerCharacter={participant} />
-            <button on:click={confirm} class="confirm">Take {incomingStress} stress</button>
+            <div class="flexrow">
+                <button on:click={() => (stressTaken = Math.max(stressTaken - 1, 0))}> - </button>
+                <input type="number" bind:value={stressTaken} min="0" max="12" />
+                <button on:click={() => (stressTaken = Math.min(stressTaken + 1, 12))}> + </button>
+            </div>
+            <button on:click={confirm} class="confirm">Take {stressTaken} stress</button>
             <button on:click={ignore} class="ignore">Ignore Hit</button>
         </div>
     </main>
 </ApplicationShell>
 
 <style lang="scss">
+    h2, span {
+        text-align: center;
+        font-size: 1.3em;
+    }
+    input {
+        text-align: center;
+        height: inherit;
+        font-size: 2em;
+        font-family: 'Franklin Gothic Medium';
+    }
 </style>
