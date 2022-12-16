@@ -15,3 +15,18 @@ export function presenceToggler(in_store, value) {
         });
     };
 }
+
+/** Creates a callback to set the specified path,
+ * in the specified actor, to the specified number, if its number.
+ * 
+ * Processes change events
+ * 
+ */
+export function numericSetter(in_doc, at_path) {
+    return (evt) => {
+        let num = Number.parseInt(evt.target.value);
+        if(Number.isInteger(num)) {
+            in_doc.update({[at_path]: num});
+        }
+    }
+}

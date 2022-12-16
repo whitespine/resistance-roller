@@ -63,7 +63,9 @@
 <!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
     <main class="resist-roller">
-        <Adversary class="box adversary" actor={$adversary} on:select-actor={(x) => ($adversary = x.detail)} />
+        <div class="box adversary">
+            <Adversary class="adversary" actor={$adversary} on:select-actor={(x) => ($adversary = x.detail)} />
+        </div>
         <div class="box" style="grid-column: 3; grid-row: 1">
             <h2>Participants</h2>
             <ParticipantsControl />

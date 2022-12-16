@@ -3,6 +3,7 @@
     import { createEventDispatcher } from "svelte";
     import { TJSDocumentCollection } from "@typhonjs-fvtt/runtime/svelte/store";
     import Dropdown from "../components/Dropdown.svelte";
+    import RollFlagEditorApp from "../editor/RollFlagEditorApp";
 
     /** @type { Actor } */
     export let actor = null;
@@ -21,32 +22,40 @@
     $: name = actor?.name ?? "Nobody";
     $: img = actor?.img ?? "icons/svg/mystery-man.svg";
     $: flags = actor?.flags[constants.moduleId];
-    $: currentResistance = flags?.current_resistance ?? 0;
-    $: maxResistance = flags?.max_resistance ?? constants.defaultMaxResistance;
+    $: currentResistance = flags?.currentResistance ?? 0;
+    $: maxResistance = flags?.maxResistance ?? constants.defaultMaxResistance;
     $: domains = flags?.domains ?? [];
 
     // Derive options
     $: actorOptions = $allActors.filter((a) => a.flags[constants.moduleId]?.tracked);
+
+    function summonEdit() {
+        if (actor) {
+            RollFlagEditorApp.for(actor).render(true, { force: true });
+        }
+    }
 </script>
 
 <div class="{$$props.class} main">
-    <Dropdown
-        class="name-selector"
-        value={"foo"}
-        options={actorOptions}
-        let:value={actorOption}
-        on:change={(e) => selectActor(e.detail)}
-    >
-        <h2 class="name" slot="button">
-            <span>
-                {name}
-            </span>
-            <i class="fas fa-ellipsis-vertical" style="float: right; cursor: pointer; padding-right: 10px;" />
-        </h2>
-        <span>{actorOption.name}</span>
-    </Dropdown>
+    <div class="flexcol" style="grid-column: 1 / 4;">
+        <Dropdown
+            class="name-selector"
+            value={"foo"}
+            options={actorOptions}
+            let:value={actorOption}
+            on:change={(e) => selectActor(e.detail)}
+        >
+            <h2 class="name" slot="button">
+                <span>
+                    {name}
+                </span>
+                <i class="fas fa-ellipsis-vertical" style="float: right; cursor: pointer; padding-right: 10px;" />
+            </h2>
+            <span>{actorOption.name}</span>
+        </Dropdown>
+    </div>
     <div class="portrait">
-        <img src={img} style="width: 100%" />
+        <img src={img} style="width: 100%" on:click={summonEdit} />
     </div>
     <div class="progress-bar">
         <div class="progress" style="width: {(100 * currentResistance) / maxResistance}%" />
@@ -57,13 +66,18 @@
     {#each domains as domain}
         <div class="domain">{domain}</div>
     {/each}
+    <p style="grid-column: 1/4;">
+        <em>
+            {actor?.getFlag(constants.moduleId, "status") ?? "Pick a character"}
+        </em>
+    </p>
 </div>
 
 <style lang="scss">
     .main {
         display: grid;
         grid-template-rows: 35px 1fr 20px;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         grid-auto-rows: 20px;
     }
 
@@ -72,7 +86,7 @@
     }
 
     .portrait {
-        grid-column: 1 / 3;
+        grid-column: 1 / 4;
     }
 
     img {
@@ -80,7 +94,7 @@
     }
 
     .progress-bar {
-        grid-column: 1 / 3;
+        grid-column: 1 / 4;
         display: block;
         width: 100%;
         background: #37114d;
