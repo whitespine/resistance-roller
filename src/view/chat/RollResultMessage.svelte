@@ -71,12 +71,12 @@
     {#each hydratedEffects as eff}
         {#if eff.status == "unresolved" || eff.stressTaken == 0}
             <div transition:fade class="result no-stress">
-                <img src={eff.actor?.img} title={eff.actor.name} />
+                <img src={eff.actor?.img} title={eff.actor?.name} />
                 <span>{eff.status == "unresolved" ? "UNRESOLVED" : "NO STRESS TAKEN"}</span>
             </div>
         {:else}
             <div transition:fade class="result stress">
-                <img src={eff.actor?.img} title={eff.actor.name} />
+                <img src={eff.actor?.img} title={eff.actor?.name} />
                 <span style="grid-area: strrol">{eff.stressTaken} {eff.resistance.toUpperCase()}</span>
                 <span style="grid-area: strtot">{eff.falloutTotalStress} TOTAL</span>
                 <span style="grid-area: fal"> {eff.falloutRoll.total} vs {eff.falloutTotalStress}: {eff.falloutResult.toUpperCase()} FALLOUT</span>
