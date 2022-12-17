@@ -6,6 +6,7 @@ import './chatmessage.js';
 import './socketlib';
 
 import "../styles/headless.scss";
+import { initSettings } from './settings.js';
 
 Hooks.once('ready', () => {
     const sidebarRect = document.querySelector('#sidebar').getBoundingClientRect();
@@ -16,7 +17,7 @@ Hooks.once('ready', () => {
 
 Hooks.once('init', async function () {
     // Make a bind to summon the roller
-    game.keybindings.register("resistance-roller", "start-roll", {
+    game.keybindings.register(constants.moduleId, "start-roll", {
         name: "Initiate resistance roll",
         onDown: () => {
             new RollApp().render(true, { focus: true });
@@ -24,6 +25,9 @@ Hooks.once('init', async function () {
         onUp: () => { },
         precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
     });
+
+    // Initialize settings
+    initSettings();
 
     // Set up api access
     game[constants.moduleId] = {

@@ -3,7 +3,7 @@ import { SvelteApplication }  from '@typhonjs-fvtt/runtime/svelte/application';
 import ClientSettingsAppShell  from './ClientSettingsAppShell.svelte';
 
 import { constants }          from '../../constants.js';
-import settings          from '../../settings';
+import { settings }          from '../../settings';
 
 export default class ClientSettingsApp extends SvelteApplication
 {

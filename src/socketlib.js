@@ -49,6 +49,12 @@ export function editRollMessage(message, participant, newEffectData) {
     socket.executeAsGM("edit-roll-message", message.uuid, participant.uuid, newEffectData);
 }
 
+/**
+ * 
+ * @param {string} messageId 
+ * @param {string} participantId 
+ * @param {RollResultEntry} newEffectData 
+ */
 async function fulfillEditRollMessage(messageId, participantId, newEffectData) {
     // Get the message
     /** @type {ChatMessage} */
@@ -80,7 +86,7 @@ async function fulfillEditRollMessage(messageId, participantId, newEffectData) {
     // Find/Confirm that we're in the effects
     let corrEffectIndex = flagData.rollData.effects.findIndex(e => e.actorID == participantId);
 
-    if(corrEffectIndex < 0) {
+    if (corrEffectIndex < 0) {
         console.error("Proposed participant was not found in flags - aborting");
         return;
     }
@@ -93,5 +99,22 @@ async function fulfillEditRollMessage(messageId, participantId, newEffectData) {
     await message.setFlag(constants.moduleId, "data", {
         rollData: { effects }
     });
+
+
+    // Play a sound effect if enabled
+    if(game.settings.get(constants.moduleId, "noise")) {
+        const play = (file) => {
+            if(file) {
+                game.audio.play(file, {volume: 1, autoplay: true, loop: false });
+            }
+        }
+        if (newEffectData.falloutResult == "major") {
+            play(game.settings.get(constants.moduleId, "noise-fallout-major"));
+        } else if (newEffectData.falloutResult == "minor") {
+            play(game.settings.get(constants.moduleId, "noise-fallout-minor"));
+        } else if (newEffectData.falloutResult == "none" && newEffectData.stressTaken > 0) {
+            play(game.settings.get(constants.moduleId, "noise-stress"));
+        }
+    }
 }
 
