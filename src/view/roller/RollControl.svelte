@@ -36,7 +36,16 @@
         if (game.user.character) {
             participants = [game.user.character, ...participants];
         }
+
+        let handledUuids = [];
         for (let participant of participants) {
+            // Deduplication step
+            if (handledUuids.includes(participant.uuid)) {
+                continue;
+            } else {
+                handledUuids.push(participant.uuid);
+            }
+
             // Roll fallout / stress
             let stressRoll = new Roll(`1d${$stressDice} + ${$stressBonus}`);
             await stressRoll.roll({ async: true });
