@@ -69,7 +69,7 @@
         <span style="grid-area: amt">{resultString}</span>
     </div>
     {#each hydratedEffects as eff}
-        {#if eff.status == "unresolved" || eff.stressTaken == 0}
+        {#if eff.status == "unresolved" || eff.stressTaken <= 0}
             <div transition:fade class="result no-stress">
                 <img src={eff.actor?.img} title={eff.actor?.name} />
                 <span>{eff.status == "unresolved" ? "UNRESOLVED" : "NO STRESS TAKEN"}</span>
