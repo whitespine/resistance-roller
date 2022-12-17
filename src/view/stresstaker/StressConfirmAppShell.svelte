@@ -52,9 +52,10 @@
             falloutTotalStress = Object.values(participant.system.resistances).reduce((acc, res) => acc + res.value, 0);
 
             // Fallout has already been rolled - check if fallout has occurred
-            if (participantEntry.falloutRoll > falloutTotalStress) {
+            let falloutRoll = Roll.fromData(participantEntry.falloutRollJSON);
+            if (falloutRoll.total > falloutTotalStress) {
                 falloutResult = "none";
-            } else if (participantEntry.falloutRoll <= 6) {
+            } else if (falloutRoll.total <= 6) {
                 falloutResult = "minor";
                 // Clear track
                 await participant.update({
@@ -72,14 +73,15 @@
         }
 
         // Update the message
-        editRollMessage(message, participant, {
-            ...participantEntry,
+        let newData = foundry.utils.duplicate(participantEntry);
+        newData = foundry.utils.mergeObject(newData, {
             status: "resolved",
             falloutTotalStress,
             resistance,
             falloutResult,
             stressTaken,
         });
+        editRollMessage(message, participant, newData);
 
         // Close it
         application.close();
