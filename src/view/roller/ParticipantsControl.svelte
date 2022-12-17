@@ -15,6 +15,11 @@
         activeUsers = $users.filter((u) => u.active);
         activeCharacters = activeUsers.map((u) => u.character).filter((c) => c);
         playerCharacter = game.user.character;
+
+        // Additionally, fix participant choices
+        if($participantChoices.some(c_uuid => !activeCharacters.some(c2 => c_uuid == c2.uuid))) {
+            $participantChoices = $participantChoices.filter(c_uuid => activeCharacters.some(c2 => c_uuid == c2.uuid));
+        }
     }
 </script>
 
