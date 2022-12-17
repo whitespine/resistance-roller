@@ -57,7 +57,7 @@
                 actorID: participant.uuid,
                 falloutRollJSON: falloutRoll.toJSON(),
                 stressRollJSON: stressRoll.toJSON(),
-                status: "unresolved",
+                status: actionRoll.total >= 8 ? "resolved" : "unresolved",
                 stressPreApply: foundry.utils.duplicate(participant.system.resistances),
 
                 // Temp vals
