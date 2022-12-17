@@ -79,7 +79,7 @@
                 <img src={eff.actor?.img} title={eff.actor?.name} />
                 <span style="grid-area: strrol">{eff.stressTaken} {eff.resistance.toUpperCase()}</span>
                 <span style="grid-area: strtot">{eff.falloutTotalStress} TOTAL</span>
-                <span style="grid-area: fal"> {eff.falloutRoll.total} vs {eff.falloutTotalStress}: {eff.falloutResult.toUpperCase()} FALLOUT</span>
+                <span style="grid-area: fal"> {@html eff.falloutRoll.toAnchor().outerHTML} vs {eff.falloutTotalStress}: {eff.falloutResult.toUpperCase()} FALLOUT</span>
             </div>
         {/if}
     {/each}
